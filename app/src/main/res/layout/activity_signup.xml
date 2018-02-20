@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:theme="@style/Theme.AppCompat.NoActionBar"
+    android:background="@color/white_background"
+    android:layout_height="match_parent"
+    tools:context=".SignUpActivity">
+
+    <ImageView
+        android:id="@+id/logo_iv"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="70dp"
+        android:src="@drawable/splash_logo"/>
+
+    <EditText
+        android:id="@+id/email_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:hint="Email"
+        android:text="john"
+        android:gravity="center"
+        android:textColorHint="@color/emirates_blue"
+        android:textColor="@color/emirates_blue"
+        android:background="@android:color/transparent"/>
+
+    <View
+        android:id="@+id/sep1_v"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/emirates_blue"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="2dp"/>
+
+    <EditText
+        android:id="@+id/password_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:gravity="center"
+        android:text="john123"
+        android:textColorHint="@color/emirates_blue"
+        android:textColor="@color/emirates_blue"
+        android:background="@android:color/transparent"/>
+
+    <View
+        android:id="@+id/sep2_v"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/emirates_blue"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/forgot_tv"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:hint="Forgot Credentials?"
+        android:gravity="center"
+        android:textSize="10sp"
+        android:textColorHint="@color/emirates_blue"
+        android:textColor="@color/emirates_blue"/>
+
+    <Button
+        android:id="@+id/sign_in_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_corner_stroke_bg"
+        android:text="Sign In"
+        android:textSize="18sp"
+        android:textColor="@color/emirates_blue"/>
+
+    <Button
+        android:id="@+id/google_sign_in_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_corner_google_solid_bg"
+        android:text="Sign In with Google"
+        android:textColor="#FFF"
+        android:textSize="18sp"/>
+
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:visibility="gone"/>
+</LinearLayout>

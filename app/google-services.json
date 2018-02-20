@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "207237969789",
+    "firebase_url": "https://nippen-energy-meters.firebaseio.com",
+    "project_id": "nippen-energy-meters",
+    "storage_bucket": "nippen-energy-meters.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207237969789:android:0ae2e6cc0c1dceba",
+        "android_client_info": {
+          "package_name": "nippenco.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207237969789-pup8hlbtu8mthfhkct98jjqsujq7vu0l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzI1w896A6nIPTYBEXB2xQNu_gv2Cd6g0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
