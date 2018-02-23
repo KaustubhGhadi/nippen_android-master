@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,8 +29,11 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import nippenco.com.fragment.AlertManagementFragment;
 import nippenco.com.fragment.DetailedFeedFragment;
 import nippenco.com.fragment.HomeFragment;
+import nippenco.com.fragment.NotiffListFragment;
+import nippenco.com.fragment.SettingsFragment;
 
 /**
  * Created by aishwarydhare on 18/02/18.
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout fragment_fl;
     RelativeLayout mainView;
     private boolean isDrawerOpen;
-    ImageView drawer_icon;
+    ImageView drawer_icon, back_icon, back_icon_white;
     Activity activity;
     Bundle item_list_frag_bundle;
 
@@ -126,6 +128,28 @@ public class MainActivity extends AppCompatActivity {
         };
         drawer_icon.setOnClickListener(drawer_listener);
 
+        back_icon = findViewById(R.id.back_icon);
+        back_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_icon.setVisibility(View.VISIBLE);
+                back_icon.setVisibility(View.GONE);
+                back_icon_white.setVisibility(View.GONE);
+                onBackPressed();
+            }
+        });
+
+        back_icon_white = findViewById(R.id.back_icon_white);
+        back_icon_white.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_icon.setVisibility(View.VISIBLE);
+                back_icon.setVisibility(View.GONE);
+                back_icon_white.setVisibility(View.GONE);
+                onBackPressed();
+            }
+        });
+
         nav_drawer_items_listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,10 +158,10 @@ public class MainActivity extends AppCompatActivity {
         };
 
         findViewById(R.id.home_ll).setOnClickListener(nav_drawer_items_listener);
-        findViewById(R.id.unlock_ll).setOnClickListener(nav_drawer_items_listener);
-        findViewById(R.id.payments_ll).setOnClickListener(nav_drawer_items_listener);
+        findViewById(R.id.detailed_ll).setOnClickListener(nav_drawer_items_listener);
+        findViewById(R.id.alerts_ll).setOnClickListener(nav_drawer_items_listener);
         findViewById(R.id.settings_ll).setOnClickListener(nav_drawer_items_listener);
-        findViewById(R.id.signout_ll).setOnClickListener(nav_drawer_items_listener);
+//        findViewById(R.id.signout_ll).setOnClickListener(nav_drawer_items_listener);
 
         set_fragment(1);
 
@@ -192,6 +216,21 @@ public class MainActivity extends AppCompatActivity {
                 frag_str = "DetailedFeedFragment";
                 break;
 
+            case 3:
+                fragment = new AlertManagementFragment();
+                frag_str = "AlertManagementFragment";
+                break;
+
+            case 4:
+                fragment = new SettingsFragment();
+                frag_str = "SettingsFragment";
+                break;
+
+            case 5:
+                fragment = new NotiffListFragment();
+                frag_str = "NotiffListFragment";
+                break;
+
             default:
                 fragment = new HomeFragment();
                 frag_str = "HomeFragment";
@@ -202,6 +241,16 @@ public class MainActivity extends AppCompatActivity {
             drawer_icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_drawer_blue));
         } else {
             drawer_icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_drawer));
+        }
+
+        if(frag_str.equalsIgnoreCase("NotiffListFragment")){
+            drawer_icon.setVisibility(View.GONE);
+            back_icon_white.setVisibility(View.GONE);
+            back_icon.setVisibility(View.VISIBLE);
+        } else {
+            drawer_icon.setVisibility(View.VISIBLE);
+            back_icon.setVisibility(View.GONE);
+            back_icon_white.setVisibility(View.GONE);
         }
 
         if(getSupportFragmentManager().getBackStackEntryCount() == 0 && !frag_str.equalsIgnoreCase("HomeFragment")){
@@ -215,25 +264,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public void openListViewFragment(String type){
-        item_list_frag_bundle = new Bundle();
-        item_list_frag_bundle.putString("type", type);
-        set_fragment(5);
-    }
-
-
     public void on_nav_drawer_item_selected(View view){
         switch (view.getId()){
             case R.id.home_ll:
                 set_fragment(1);
                 break;
 
-            case R.id.unlock_ll:
+            case R.id.detailed_ll:
                 set_fragment(2);
                 break;
 
-            case R.id.payments_ll:
+            case R.id.alerts_ll:
                 set_fragment(3);
                 break;
 
@@ -285,6 +326,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 2000);
         } else {
+            if(selected_frag_id == 5){g
+                drawer_icon.setVisibility(View.VISIBLE);
+                back_icon.setVisibility(View.GONE);
+                back_icon_white.setVisibility(View.GONE);
+            }
             super.onBackPressed();
         }
 
@@ -313,6 +359,8 @@ public class MainActivity extends AppCompatActivity {
                     .show();
         }
     }*/
+
+
 
 
 

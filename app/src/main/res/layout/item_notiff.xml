@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginTop="8dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_ll"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/title_tv"
+                android:textColor="@color/colorAccent"
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:text="Testing (Akshay)"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/alarm_tv"
+                android:layout_width="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginLeft="8dp"
+                android:text="PT Max"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/date_time_tv"
+                android:layout_width="match_parent"
+                android:textSize="10sp"
+                android:gravity="end"
+                android:layout_marginLeft="8dp"
+                android:layout_height="wrap_content"
+                android:text="2018-22-14 22:14" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:textSize="12sp"
+                android:textColor="@color/colorAccent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Value:" />
+
+            <TextView
+                android:id="@+id/value_tv"
+                android:textSize="12sp"
+                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="125189237281" />
+
+            <TextView
+                android:textSize="12sp"
+                android:textColor="@color/colorAccent"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_height="wrap_content"
+                android:text="Condition:" />
+
+            <TextView
+                android:id="@+id/condition_tv"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:text="Greater Than"
+                android:layout_marginLeft="8dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textSize="12sp"
+                android:textColor="@color/colorAccent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Message:" />
+
+            <TextView
+                android:id="@+id/msg_tv"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Testing (Akshay) has PT multiplier value 195.0 is less than 20.0" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/blue_grey"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

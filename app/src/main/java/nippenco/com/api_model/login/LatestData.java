@@ -17,10 +17,10 @@ public class LatestData {
     private Double frequencyHz;
     @SerializedName("Communication Status")
     @Expose
-    private Integer communicationStatus;
+    private Double communicationStatus;
     @SerializedName("PT multiplier")
     @Expose
-    private Integer pTMultiplier;
+    private Double pTMultiplier;
     @SerializedName("Amps I1")
     @Expose
     private Double ampsI1;
@@ -65,7 +65,7 @@ public class LatestData {
     private Double activePowerKWL2;
     @SerializedName("Power Factor PF2")
     @Expose
-    private Integer powerFactorPF2;
+    private Double powerFactorPF2;
 
     /**
      * No args constructor for use in serialization
@@ -97,7 +97,7 @@ public class LatestData {
      * @param cTMultiplier
      * @param tHDAmpsI1
      */
-    public LatestData(Double tHDAmpsI1, Double tHDAmpsI3, Double frequencyHz, Integer communicationStatus, Integer pTMultiplier, Double ampsI1, Double voltsVLNL3L1, Double powerFactorPF1, Double tHDAmpsI2, Double voltsVLNL1L2, Double voltsVLNL2L3, Double activePowerKWL3, Double activePowerKWL1, Double cTMultiplier, Double ampsI3, Double ampsI2, Double runHour, Double powerFactorPF3, Double activePowerKWL2, Integer powerFactorPF2) {
+    public LatestData(Double tHDAmpsI1, Double tHDAmpsI3, Double frequencyHz, Double communicationStatus, Double pTMultiplier, Double ampsI1, Double voltsVLNL3L1, Double powerFactorPF1, Double tHDAmpsI2, Double voltsVLNL1L2, Double voltsVLNL2L3, Double activePowerKWL3, Double activePowerKWL1, Double cTMultiplier, Double ampsI3, Double ampsI2, Double runHour, Double powerFactorPF3, Double activePowerKWL2, Double powerFactorPF2) {
         super();
         this.tHDAmpsI1 = tHDAmpsI1;
         this.tHDAmpsI3 = tHDAmpsI3;
@@ -145,19 +145,19 @@ public class LatestData {
         this.frequencyHz = frequencyHz;
     }
 
-    public Integer getCommunicationStatus() {
+    public Double getCommunicationStatus() {
         return communicationStatus;
     }
 
-    public void setCommunicationStatus(Integer communicationStatus) {
+    public void setCommunicationStatus(Double communicationStatus) {
         this.communicationStatus = communicationStatus;
     }
 
-    public Integer getPTMultiplier() {
+    public Double getPTMultiplier() {
         return pTMultiplier;
     }
 
-    public void setPTMultiplier(Integer pTMultiplier) {
+    public void setPTMultiplier(Double pTMultiplier) {
         this.pTMultiplier = pTMultiplier;
     }
 
@@ -273,11 +273,11 @@ public class LatestData {
         this.activePowerKWL2 = activePowerKWL2;
     }
 
-    public Integer getPowerFactorPF2() {
+    public Double getPowerFactorPF2() {
         return powerFactorPF2;
     }
 
-    public void setPowerFactorPF2(Integer powerFactorPF2) {
+    public void setPowerFactorPF2(Double powerFactorPF2) {
         this.powerFactorPF2 = powerFactorPF2;
     }
 

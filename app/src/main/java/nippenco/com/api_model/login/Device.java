@@ -8,25 +8,25 @@ public class Device {
 
     @SerializedName("comm_interval")
     @Expose
-    private Integer commInterval;
+    private double commInterval;
     @SerializedName("latest_data")
     @Expose
     private LatestData latestData;
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private double id;
     @SerializedName("device_id")
     @Expose
     private String deviceId;
     @SerializedName("ct_gain")
     @Expose
-    private Integer ctGain;
+    private double ctGain;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("vt_gain")
     @Expose
-    private Integer vtGain;
+    private double vtGain;
 
     /**
      * No args constructor for use in serialization
@@ -45,7 +45,7 @@ public class Device {
      * @param deviceId
      * @param commInterval
      */
-    public Device(Integer commInterval, LatestData latestData, Integer id, String deviceId, Integer ctGain, String name, Integer vtGain) {
+    public Device(double commInterval, LatestData latestData, double id, String deviceId, double ctGain, String name, double vtGain) {
         super();
         this.commInterval = commInterval;
         this.latestData = latestData;
@@ -56,11 +56,11 @@ public class Device {
         this.vtGain = vtGain;
     }
 
-    public Integer getCommInterval() {
+    public double getCommInterval() {
         return commInterval;
     }
 
-    public void setCommInterval(Integer commInterval) {
+    public void setCommInterval(double commInterval) {
         this.commInterval = commInterval;
     }
 
@@ -72,11 +72,11 @@ public class Device {
         this.latestData = latestData;
     }
 
-    public Integer getId() {
+    public double getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(double id) {
         this.id = id;
     }
 
@@ -88,11 +88,11 @@ public class Device {
         this.deviceId = deviceId;
     }
 
-    public Integer getCtGain() {
+    public double getCtGain() {
         return ctGain;
     }
 
-    public void setCtGain(Integer ctGain) {
+    public void setCtGain(double ctGain) {
         this.ctGain = ctGain;
     }
 
@@ -104,11 +104,11 @@ public class Device {
         this.name = name;
     }
 
-    public Integer getVtGain() {
+    public double getVtGain() {
         return vtGain;
     }
 
-    public void setVtGain(Integer vtGain) {
+    public void setVtGain(double vtGain) {
         this.vtGain = vtGain;
     }
 

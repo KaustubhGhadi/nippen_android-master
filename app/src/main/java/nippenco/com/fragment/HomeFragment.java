@@ -65,6 +65,15 @@ public class HomeFragment extends Fragment{
 
         initLayoutVars(view);
 
+        View.OnClickListener notiff_click_listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)activity_context).set_fragment(5);
+            }
+        };
+
+        notiff_iv.setOnClickListener(notiff_click_listener);
+
         meter_name_tv.setText(Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device).getName());
 
         meterStatsAdapter = new MeterStatsAdapter(frag_context, new ArrayList<String>());

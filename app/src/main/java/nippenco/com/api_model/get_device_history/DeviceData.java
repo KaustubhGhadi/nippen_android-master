@@ -9,7 +9,7 @@ public class DeviceData {
 
     @SerializedName("fr_hz")
     @Expose
-    private List<Integer> frHz = null;
+    private List<Double> frHz = null;
     @SerializedName("pf3")
     @Expose
     private List<Double> pf3 = null;
@@ -18,7 +18,7 @@ public class DeviceData {
     private List<Double> pf2 = null;
     @SerializedName("v_vlnl1l2")
     @Expose
-    private List<Integer> vVlnl1l2 = null;
+    private List<Double> vVlnl1l2 = null;
     @SerializedName("v_vlnl3l1")
     @Expose
     private List<Double> vVlnl3l1 = null;
@@ -27,7 +27,7 @@ public class DeviceData {
     private List<Double> apKwl1 = null;
     @SerializedName("rh")
     @Expose
-    private List<Integer> rh = null;
+    private List<Double> rh = null;
     @SerializedName("amps_i3")
     @Expose
     private List<Double> ampsI3 = null;
@@ -36,7 +36,7 @@ public class DeviceData {
     private List<Double> ampsI1 = null;
     @SerializedName("pf1")
     @Expose
-    private List<Integer> pf1 = null;
+    private List<Double> pf1 = null;
     @SerializedName("amps_i2")
     @Expose
     private List<Double> ampsI2 = null;
@@ -74,7 +74,7 @@ public class DeviceData {
      * @param pf1
      * @param vVlnl1l2
      */
-    public DeviceData(List<Integer> frHz, List<Double> pf3, List<Double> pf2, List<Integer> vVlnl1l2, List<Double> vVlnl3l1, List<Double> apKwl1, List<Integer> rh, List<Double> ampsI3, List<Double> ampsI1, List<Integer> pf1, List<Double> ampsI2, List<Double> apKwl3, List<Double> apKwl2, List<String> timestamps) {
+    public DeviceData(List<Double> frHz, List<Double> pf3, List<Double> pf2, List<Double> vVlnl1l2, List<Double> vVlnl3l1, List<Double> apKwl1, List<Double> rh, List<Double> ampsI3, List<Double> ampsI1, List<Double> pf1, List<Double> ampsI2, List<Double> apKwl3, List<Double> apKwl2, List<String> timestamps) {
         super();
         this.frHz = frHz;
         this.pf3 = pf3;
@@ -92,11 +92,11 @@ public class DeviceData {
         this.timestamps = timestamps;
     }
 
-    public List<Integer> getFrHz() {
+    public List<Double> getFrHz() {
         return frHz;
     }
 
-    public void setFrHz(List<Integer> frHz) {
+    public void setFrHz(List<Double> frHz) {
         this.frHz = frHz;
     }
 
@@ -116,11 +116,11 @@ public class DeviceData {
         this.pf2 = pf2;
     }
 
-    public List<Integer> getVVlnl1l2() {
+    public List<Double> getVVlnl1l2() {
         return vVlnl1l2;
     }
 
-    public void setVVlnl1l2(List<Integer> vVlnl1l2) {
+    public void setVVlnl1l2(List<Double> vVlnl1l2) {
         this.vVlnl1l2 = vVlnl1l2;
     }
 
@@ -140,11 +140,11 @@ public class DeviceData {
         this.apKwl1 = apKwl1;
     }
 
-    public List<Integer> getRh() {
+    public List<Double> getRh() {
         return rh;
     }
 
-    public void setRh(List<Integer> rh) {
+    public void setRh(List<Double> rh) {
         this.rh = rh;
     }
 
@@ -164,11 +164,11 @@ public class DeviceData {
         this.ampsI1 = ampsI1;
     }
 
-    public List<Integer> getPf1() {
+    public List<Double> getPf1() {
         return pf1;
     }
 
-    public void setPf1(List<Integer> pf1) {
+    public void setPf1(List<Double> pf1) {
         this.pf1 = pf1;
     }
 
