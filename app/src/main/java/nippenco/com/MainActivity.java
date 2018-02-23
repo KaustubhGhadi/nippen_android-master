@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 2000);
         } else {
-            if(selected_frag_id == 5){g
+            if(selected_frag_id == 5){
                 drawer_icon.setVisibility(View.VISIBLE);
                 back_icon.setVisibility(View.GONE);
                 back_icon_white.setVisibility(View.GONE);
