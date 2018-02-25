@@ -61,12 +61,12 @@ public class AlertManagementFragment extends Fragment {
 
         initLayoutVars(view);
 
-        meter_name_tv.setText("Manage Alerts");
+        meter_name_tv.setText("Manage Alert");
 
-        notiffListAdapter = new NotiffListAdapter(frag_context, (ArrayList<RecentAlert>) Common.getInstance().login_datum.getData().getRecentAlerts());
-        notiff_rv.setLayoutManager( new LinearLayoutManager(frag_context));
-        notiff_rv.setAdapter(notiffListAdapter);
-        notiff_rv.setVisibility(View.VISIBLE);
+//        notiffListAdapter = new NotiffListAdapter(frag_context, Alert);
+//        notiff_rv.setLayoutManager( new LinearLayoutManager(frag_context));
+//        notiff_rv.setAdapter(notiffListAdapter);
+//        notiff_rv.setVisibility(View.VISIBLE);
     }
 
     private void initLayoutVars(View view) {

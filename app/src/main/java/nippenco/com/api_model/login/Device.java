@@ -14,7 +14,7 @@ public class Device {
     private LatestData latestData;
     @SerializedName("id")
     @Expose
-    private double id;
+    private int id;
     @SerializedName("device_id")
     @Expose
     private String deviceId;
@@ -45,7 +45,7 @@ public class Device {
      * @param deviceId
      * @param commInterval
      */
-    public Device(double commInterval, LatestData latestData, double id, String deviceId, double ctGain, String name, double vtGain) {
+    public Device(double commInterval, LatestData latestData, int id, String deviceId, double ctGain, String name, double vtGain) {
         super();
         this.commInterval = commInterval;
         this.latestData = latestData;
@@ -72,11 +72,11 @@ public class Device {
         this.latestData = latestData;
     }
 
-    public double getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(double id) {
+    public void setId(int id) {
         this.id = id;
     }
 

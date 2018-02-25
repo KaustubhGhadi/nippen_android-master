@@ -22,10 +22,12 @@ import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import nippenco.com.api_model.login.Login;
+import nippenco.com.api_model.login.RecentAlert;
 
 import static nippenco.com.Constant.host;
 import static nippenco.com.Constant.login;
@@ -84,6 +86,7 @@ public class SplashActivity extends Activity {
                             try{
                                 Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
                                 Common.getInstance().login_datum = gson.fromJson(response.toString(), Login.class);
+                                Common.getInstance().alerts_arr = Common.getInstance().login_datum.getAllNormalizedAlerts();
                             }catch (Exception e){
                                 e.printStackTrace();
                             }

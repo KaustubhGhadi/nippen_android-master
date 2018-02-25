@@ -2,6 +2,9 @@ package nippenco.com;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import nippenco.com.api_model.Alert;
 import nippenco.com.api_model.login.Login;
 
 /**
@@ -15,6 +18,8 @@ public class Common {
     // login response
     public Login login_datum;
     public int selected_login_device;
+    public ArrayList<Alert> alerts_arr;
+    public String device_history_for = "";
 
     public static Common getInstance() {
         return ourInstance;

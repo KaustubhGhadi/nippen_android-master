@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import nippenco.com.Common;
 import nippenco.com.R;
+import nippenco.com.api_model.Alert;
 import nippenco.com.api_model.login.RecentAlert;
 
 /**
@@ -20,9 +21,9 @@ import nippenco.com.api_model.login.RecentAlert;
 public class NotiffListAdapter extends RecyclerView.Adapter<NotiffListAdapter.ViewHolder>{
 
     private Context mContext;
-    private ArrayList<RecentAlert> alerts;
+    private ArrayList<Alert> alerts;
 
-    public NotiffListAdapter(Context activity_context, ArrayList<RecentAlert> para_alerts) {
+    public NotiffListAdapter(Context activity_context, ArrayList<Alert> para_alerts) {
         this.mContext = activity_context;
         this.alerts = para_alerts;
     }
@@ -42,7 +43,7 @@ public class NotiffListAdapter extends RecyclerView.Adapter<NotiffListAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (position != alerts.size()) {
-            RecentAlert recentAlert = Common.getInstance().login_datum.getData().getRecentAlerts().get(position);
+            Alert recentAlert = alerts.get(position);
             holder.title_tv.setText("" + recentAlert.getDeviceName());
             holder.alarm_tv.setText("" + recentAlert.getAlarmName());
             holder.msg_tv.setText("" + recentAlert.getDescription());

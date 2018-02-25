@@ -75,6 +75,7 @@ public class HomeFragment extends Fragment{
         notiff_iv.setOnClickListener(notiff_click_listener);
 
         meter_name_tv.setText(Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device).getName());
+        notiff_count_tv.setText(""+Common.getInstance().login_datum.getData().getUnreadAlerts());
 
         meterStatsAdapter = new MeterStatsAdapter(frag_context, new ArrayList<String>());
         meter_states_rv.setLayoutManager( new LinearLayoutManager(frag_context));

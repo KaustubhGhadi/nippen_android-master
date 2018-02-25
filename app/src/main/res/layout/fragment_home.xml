@@ -4,7 +4,7 @@
     android:orientation="vertical"
     style="@style/Theme.AppCompat.NoActionBar"
     android:layout_width="match_parent"
-    android:background="@color/blue_grey"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent">
 
     <RelativeLayout

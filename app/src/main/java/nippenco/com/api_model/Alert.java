@@ -1,62 +1,62 @@
-
-package nippenco.com.api_model.get_all_alerts;
+package nippenco.com.api_model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import nippenco.com.api_model.Alert;
-import nippenco.com.api_model.login.RecentAlert;
+/**
+ * Created by aishwarydhare on 25/02/18.
+ */
 
-public class Datum {
+public class Alert {
 
-    @SerializedName("condition_value")
-    @Expose
-    private Double conditionValue;
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("device_id")
-    @Expose
-    private Integer deviceId;
-    @SerializedName("condition_name")
-    @Expose
-    private String conditionName;
-    @SerializedName("device_name")
-    @Expose
-    private String deviceName;
-    @SerializedName("feed_value")
-    @Expose
-    private Double feedValue;
-    @SerializedName("alarm_name")
-    @Expose
-    private String alarmName;
-    @SerializedName("description")
-    @Expose
-    private String description;
-    @SerializedName("created_at")
-    @Expose
-    private String createdAt;
+        @SerializedName("condition_value")
+        @Expose
+        private Double conditionValue;
+        @SerializedName("id")
+        @Expose
+        private Integer id;
+        @SerializedName("device_id")
+        @Expose
+        private Integer deviceId;
+        @SerializedName("condition_name")
+        @Expose
+        private String conditionName;
+        @SerializedName("device_name")
+        @Expose
+        private String deviceName;
+        @SerializedName("feed_value")
+        @Expose
+        private Double feedValue;
+        @SerializedName("alarm_name")
+        @Expose
+        private String alarmName;
+        @SerializedName("description")
+        @Expose
+        private String description;
+        @SerializedName("created_at")
+        @Expose
+        private String createdAt;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
-    public Datum() {
+        /**
+         * No args constructor for use in serialization
+         *
+         */
+    public Alert() {
     }
 
-    /**
-     *
-     * @param id
-     * @param conditionValue
-     * @param deviceName
-     * @param createdAt
-     * @param description
-     * @param feedValue
-     * @param alarmName
-     * @param conditionName
-     * @param deviceId
-     */
-    public Datum(Double conditionValue, Integer id, Integer deviceId, String conditionName, String deviceName, Double feedValue, String alarmName, String description, String createdAt) {
+        /**
+         *
+         * @param id
+         * @param conditionValue
+         * @param deviceName
+         * @param createdAt
+         * @param description
+         * @param feedValue
+         * @param alarmName
+         * @param conditionName
+         * @param deviceId
+         */
+    public Alert(Double conditionValue, Integer id, Integer deviceId, String conditionName, String deviceName, Double feedValue, String alarmName, String description, String createdAt) {
         super();
         this.conditionValue = conditionValue;
         this.id = id;
@@ -140,5 +140,4 @@ public class Datum {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
-
 }
