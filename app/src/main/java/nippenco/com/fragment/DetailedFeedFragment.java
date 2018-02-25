@@ -37,17 +37,24 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
+import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
+import lecho.lib.hellocharts.view.LineChartView;
 import nippenco.com.Common;
 import nippenco.com.MainActivity;
 import nippenco.com.R;
@@ -62,16 +69,15 @@ import static nippenco.com.Constant.host;
 
 public class DetailedFeedFragment extends Fragment {
 
-
-
     Context activity_context, frag_context;
     private TextView meter_name_tv;
     private FrameLayout chart_container_fl;
-    Button select_from_btn, select_to_btn, select_feed_type_btn, select_basis_btn, submit_btn;
+    Button select_from_btn, select_to_btn, select_feed_type_btn, select_basis_btn, submit_btn, graph_type_btn;
     ProgressBar pb;
     private String TAG = "NPN_LOG";
     Calendar from_date, to_date;
-    static String date_from_str, date_to_str, feed_type_str, basis_str;
+    static String date_from_str, date_to_str, feed_type_str, basis_str, graph_type_str;
+    static int feed_type_pos;
 
     TextView edit_date_tv, feed_type_tv, basis_tv, from_date_tv, to_date_tv;
     LinearLayout date_select_ll, date_show_ll;
@@ -110,6 +116,31 @@ public class DetailedFeedFragment extends Fragment {
 
         initLayoutVars(view);
 
+        from_date = null;
+        to_date = null;
+        basis_str = null;
+        date_from_str = null;
+        date_to_str = null;
+        graph_type_str = null;
+
+        if(Common.getInstance().device_history_for_pos == -1) {
+            if (Common.getInstance().device_history_for != null) {
+                if (!Common.getInstance().device_history_for.equalsIgnoreCase("")) {
+                    for (int i = 0; i < Common.getInstance().login_datum.getData().getDevices().getDevices().size(); i++) {
+                        if (Common.getInstance().login_datum.getData().getDevices().getDevices().get(i).getName().equalsIgnoreCase(Common.getInstance().device_history_for)) {
+                            feed_type_str = Common.getInstance().device_history_for;
+                            feed_type_pos = i;
+                            select_feed_type_btn.setText(Common.getInstance().device_history_for);
+                        }
+                    }
+                }
+            }
+        } else {
+            feed_type_str = Common.getInstance().device_history_for;
+            feed_type_pos = Common.getInstance().device_history_for_pos;
+            select_feed_type_btn.setText(Common.getInstance().device_history_for);
+        }
+
         chart_container_fl.setVisibility(View.GONE);
         pb.setVisibility(View.GONE);
 
@@ -134,11 +165,12 @@ public class DetailedFeedFragment extends Fragment {
             public void onClick(View view) {
                 cancel_active_requests();
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(frag_context);
-                builderSingle.setTitle("Select Meter");
+                builderSingle.setTitle("Select Feed Type");
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(frag_context, android.R.layout.select_dialog_item);
-                arrayAdapter.add("Ampere data");
-                arrayAdapter.add("Voltage data");
+                for (int i = 0; i < Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device).getLatestData().size(); i++) {
+                    arrayAdapter.add(Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device).getLatestData().get(i).getName());
+                }
 
                 builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -151,6 +183,7 @@ public class DetailedFeedFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         feed_type_str = arrayAdapter.getItem(which);
+                        feed_type_pos = which;
                         select_feed_type_btn.setText(""+feed_type_str);
                         dialog.dismiss();
                     }
@@ -164,13 +197,12 @@ public class DetailedFeedFragment extends Fragment {
             public void onClick(View view) {
                 cancel_active_requests();
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(frag_context);
-                builderSingle.setTitle("Select Meter");
+                builderSingle.setTitle("Select Basis");
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(frag_context, android.R.layout.select_dialog_item);
-                arrayAdapter.add("Weekly : 7 day");
-                arrayAdapter.add("Monthly : 30 day");
-                arrayAdapter.add("Daily : 24 hour");
-                arrayAdapter.add("1 Hour : 5 min");
+                arrayAdapter.add("Averaged by Days");
+                arrayAdapter.add("Averaged by Hours");
+                arrayAdapter.add("Averaged by Minutes");
 
                 builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -183,7 +215,53 @@ public class DetailedFeedFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         basis_str = arrayAdapter.getItem(which);
+                        assert basis_str != null;
+                        if(basis_str.equalsIgnoreCase("Averaged by Days")){
+                            basis_str = "Daily";
+                            select_to_btn.setEnabled(true);
+                            select_from_btn.setText("-- Select From Date --");
+                            select_to_btn.setText("-- Select To Date --");
+                        } else if(basis_str.equalsIgnoreCase("Averaged by Hours")){
+                            basis_str = "Hourly";
+                            select_to_btn.setEnabled(false);
+                            select_to_btn.setText("-- Not Required --");
+                        } else if(basis_str.equalsIgnoreCase("Averaged by Minutes")){
+                            basis_str = "Minute";
+                            select_from_btn.setText("-- Select From Hour --");
+                            select_to_btn.setEnabled(false);
+                            select_to_btn.setText("-- Not Required --");
+                        }
                         select_basis_btn.setText(""+basis_str);
+                        dialog.dismiss();
+                    }
+                });
+                builderSingle.show();
+            }
+        });
+
+        graph_type_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancel_active_requests();
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(frag_context);
+                builderSingle.setTitle("Select Graph Type");
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(frag_context, android.R.layout.select_dialog_item);
+                arrayAdapter.add("Line Graph");
+                arrayAdapter.add("Bar Graph");
+
+                builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        graph_type_str = arrayAdapter.getItem(which);
+                        graph_type_btn.setText(""+graph_type_str);
                         dialog.dismiss();
                     }
                 });
@@ -195,10 +273,31 @@ public class DetailedFeedFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 cancel_active_requests();
-                if (from_date != null && to_date != null && !basis_str.equalsIgnoreCase("") && !feed_type_str.equalsIgnoreCase("")) {
-                    pb.setVisibility(View.VISIBLE);
-                    hit_api_to_get_device_history_data();
+                if(from_date == null){
+                    Toast.makeText(activity_context, "Please select From-Date to continue", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                if(basis_str == null){
+                    Toast.makeText(activity_context, "Please select Basis to continue", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(feed_type_str == null){
+                    Toast.makeText(activity_context, "Please select Feed Type to continue", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(graph_type_str == null){
+                    Toast.makeText(activity_context, "Please select Graph Type to continue", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(basis_str.equalsIgnoreCase("Daily")){
+                    if (date_to_str == null) {
+                        Toast.makeText(activity_context, "Please select To-Date to continue", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                pb.setVisibility(View.VISIBLE);
+                hit_api_to_get_device_history_data();
             }
         });
 
@@ -216,32 +315,94 @@ public class DetailedFeedFragment extends Fragment {
 
     private void showDateTimePicker(final boolean is_from_date_selecting){
         cancel_active_requests();
+
+        if (basis_str == null){
+            Toast.makeText(activity_context, "Select Basis to continue", Toast.LENGTH_SHORT).show();
+            return;
+        } else if(basis_str.equalsIgnoreCase("")){
+            Toast.makeText(activity_context, "Select Basis to continue", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (basis_str.equalsIgnoreCase("Daily") && !is_from_date_selecting) {
+            if(date_from_str == null) {
+                Toast.makeText(activity_context, "Select From Date to continue", Toast.LENGTH_SHORT).show();
+                return;
+            } else if(date_from_str.equalsIgnoreCase("")){
+                Toast.makeText(activity_context, "Select From Date to continue", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
         final Calendar currentDate = Calendar.getInstance();
         date = Calendar.getInstance();
-        new DatePickerDialog(activity_context, new DatePickerDialog.OnDateSetListener() {
+
+        Calendar default_date = currentDate;
+        if(is_from_date_selecting){
+            if(from_date != null){
+                default_date = from_date;
+            }
+        } else {
+            if(to_date != null){
+                default_date = to_date;
+            }
+        }
+        final TimePickerDialog timePickerDialog = new TimePickerDialog(activity_context, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                date.set(Calendar.MINUTE, minute);
+                Log.v(TAG, "The choosen one " + date.getTime());
+                DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+                if (basis_str.equalsIgnoreCase("Minute")) {
+                    dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                }
+                if(is_from_date_selecting){
+                    from_date = date;
+                    date_from_str = dateFormatter.format(from_date.getTime());
+                    select_from_btn.setText(date_from_str);
+                } else {
+                    to_date = date;
+                    date_to_str = dateFormatter.format(to_date.getTime());
+                    select_to_btn.setText(date_to_str);
+                }
+            }
+        }, default_date.get(Calendar.HOUR_OF_DAY), default_date.get(Calendar.MINUTE), false);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(activity_context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 date.set(year, monthOfYear, dayOfMonth);
-                new TimePickerDialog(activity_context, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        date.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        date.set(Calendar.MINUTE, minute);
-                        Log.v(TAG, "The choosen one " + date.getTime());
-                        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                        if(is_from_date_selecting){
-                            from_date = date;
-                            date_from_str = dateFormatter.format(from_date.getTime());
-                            select_from_btn.setText(date_from_str);
-                        } else {
-                            to_date = date;
-                            date_to_str = dateFormatter.format(to_date.getTime());
-                            select_to_btn.setText(date_to_str);
-                        }
+                if (basis_str.equalsIgnoreCase("Minute")) {
+                    timePickerDialog.show();
+                } else {
+                    date.set(Calendar.HOUR_OF_DAY, 24);
+                    date.set(Calendar.MINUTE, 0);
+                    Log.v(TAG, "The choosen one " + date.getTime());
+                    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                    if(is_from_date_selecting){
+                        from_date = date;
+                        date_from_str = dateFormatter.format(from_date.getTime());
+                        select_from_btn.setText(date_from_str);
+                    } else {
+                        to_date = date;
+                        date_to_str = dateFormatter.format(to_date.getTime());
+                        select_to_btn.setText(date_to_str);
                     }
-                }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
+                }
             }
-        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
+        }, default_date.get(Calendar.YEAR), default_date.get(Calendar.MONTH), default_date.get(Calendar.DATE));
+
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+        datePickerDialog.show();
+
+//        if(basis_str.equalsIgnoreCase("Daily")){
+//            datePickerDialog.show();
+//        } else if(basis_str.equalsIgnoreCase("Hourly")){
+//            datePickerDialog.show();
+//        } else if(basis_str.equalsIgnoreCase("Minute")){
+//            timePickerDialog.show();
+//        }
     }
 
     private void initLayoutVars(View v) {
@@ -250,6 +411,7 @@ public class DetailedFeedFragment extends Fragment {
         select_to_btn = v.findViewById(R.id.select_to_btn);
         select_basis_btn = v.findViewById(R.id.basis_btn);
         select_feed_type_btn = v.findViewById(R.id.select_feed_type_btn);
+        graph_type_btn = v.findViewById(R.id.graph_type_btn);
         submit_btn = v.findViewById(R.id.submit_btn);
         chart_container_fl = v.findViewById(R.id.chart_container_fl);
 
@@ -275,7 +437,11 @@ public class DetailedFeedFragment extends Fragment {
 
     void update_UI(boolean is_graph_visible) {
         if (is_graph_visible) {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(chart_container_fl.getId(), new DetailedDataChartFragment()).commit();
+            if (graph_type_str.equalsIgnoreCase("Bar Graph")) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(chart_container_fl.getId(), new DetailedColumnDataChartFragment()).commit();
+            } else if(graph_type_str.equalsIgnoreCase("Line Graph")){
+                getActivity().getSupportFragmentManager().beginTransaction().replace(chart_container_fl.getId(), new DetailedLineDataChartFragment()).commit();
+            }
             from_date_tv.setText(date_from_str);
             to_date_tv.setText(date_to_str);
             basis_tv.setText(basis_str);
@@ -286,6 +452,7 @@ public class DetailedFeedFragment extends Fragment {
             chart_container_fl.setVisibility(View.VISIBLE);
         } else {
             date_show_ll.setVisibility(View.GONE);
+            pb.setVisibility(View.GONE);
             date_select_ll.setVisibility(View.VISIBLE);
             chart_container_fl.setVisibility(View.GONE);
         }
@@ -298,8 +465,15 @@ public class DetailedFeedFragment extends Fragment {
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("user_id", Common.getInstance().login_datum.getData().getUserInfo().getId());
+        payload.put("basis", basis_str);
         payload.put("from_date", date_from_str);
-        payload.put("to_date", date_to_str);
+
+        if(date_to_str == null){
+            payload.put("to_date", date_from_str);
+        } else {
+            payload.put("to_date", date_to_str);
+        }
+
         payload.put("device_id", Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device).getId());
         Log.d(TAG, "hit_api_to_get_device_history_data: "+ payload.toString());
         JSONObject jsonPayload = new JSONObject(payload);
@@ -320,6 +494,9 @@ public class DetailedFeedFragment extends Fragment {
                         }
                         if (device_history_datum.getData().getDeviceData().getTimestamps().size() > 0) {
                             update_UI(true);
+                        } else {
+                            Toast.makeText(activity_context, "No Data Found", Toast.LENGTH_SHORT).show();
+                            update_UI(false);
                         }
                     }
                 },
@@ -347,7 +524,7 @@ public class DetailedFeedFragment extends Fragment {
 
 
 
-    public static class DetailedDataChartFragment extends Fragment {
+    public static class DetailedColumnDataChartFragment extends Fragment {
 
         Context activity_context, frag_context;
         private String TAG = "NPN_LOG";
@@ -383,7 +560,7 @@ public class DetailedFeedFragment extends Fragment {
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             chart = view.findViewById(R.id.chart);
-            chart.setOnValueTouchListener(new ValueTouchListener());
+            chart.setOnValueTouchListener(new ColumnValueTouchListener());
             chart.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
 
             generateDefaultData();
@@ -391,21 +568,15 @@ public class DetailedFeedFragment extends Fragment {
 
         private void generateDefaultData() {
             int numSubcolumns = 1;
-            int numColumns = device_history_datum.getData().getDeviceData().getTimestamps().size();
             // Column can have many subcolumns, here by default I use 1 subcolumn in each of 25 columns.
             List<Column> columns = new ArrayList<Column>();
             List<SubcolumnValue> values;
-            for (int i = 0; i < numColumns; ++i) {
+            for (int i = 0; i < device_history_datum.getData().getDeviceData().getAmpsI1().size(); ++i) {
 
                 values = new ArrayList<SubcolumnValue>();
                 for (int j = 0; j < numSubcolumns; ++j) {
                     float value = 0;
-                    if (feed_type_str.equalsIgnoreCase("Ampere data")) {
-                        value = Float.parseFloat(""+device_history_datum.getData().getDeviceData().getAmpsI1().get(i));
-                    }
-                    if (feed_type_str.equalsIgnoreCase("Voltage data")) {
-                        value = Float.parseFloat(""+device_history_datum.getData().getDeviceData().getVVlnl1l2().get(i));
-                    }
+                    value = Float.parseFloat(""+device_history_datum.getData().getDeviceData().getAmpsI1().get(i));
                     values.add(new SubcolumnValue(value, ChartUtils.pickColor()));
                 }
 
@@ -421,7 +592,13 @@ public class DetailedFeedFragment extends Fragment {
                 Axis axisX = new Axis();
                 Axis axisY = new Axis().setHasLines(true);
                 if (hasAxesNames) {
-                    axisX.setName("Timestamp");
+                    if (basis_str.equalsIgnoreCase("Daily")) {
+                        axisX.setName("Days");
+                    } else if(basis_str.equalsIgnoreCase("Hourly")) {
+                        axisX.setName("Hours");
+                    } else if(basis_str.equalsIgnoreCase("Minute")) {
+                        axisX.setName("Minutes");
+                    }
                     axisY.setName("Values");
                 }
                 data.setAxisXBottom(axisX);
@@ -435,12 +612,128 @@ public class DetailedFeedFragment extends Fragment {
 
         }
 
-        private class ValueTouchListener implements ColumnChartOnValueSelectListener {
+        private class ColumnValueTouchListener implements ColumnChartOnValueSelectListener {
             @Override
             public void onValueSelected(int columnIndex, int subcolumnIndex, SubcolumnValue value) {
-
+//                Toast.makeText(activity_context, "value: "+ value, Toast.LENGTH_SHORT).show();
             }
 
+            @Override
+            public void onValueDeselected() {
+
+            }
+        }
+    }
+
+
+    public static class DetailedLineDataChartFragment extends Fragment {
+
+        Context activity_context, frag_context;
+        private String TAG = "NPN_LOG";
+        private LineChartView chart;
+        private LineChartData data;
+        private int numberOfLines = 1;
+        private boolean hasAxes = true;
+        private boolean hasAxesNames = true;
+        private boolean hasLines = true;
+        private boolean hasPoints = false;
+        private ValueShape shape = ValueShape.CIRCLE;
+        private boolean isFilled = true;
+        private boolean hasLabels = false;
+        private boolean isCubic = false;
+        private boolean hasLabelForSelected = false;
+        private boolean pointsHaveDifferentColor;
+        private boolean hasGradientToTransparent = false;
+
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            this.activity_context = context;
+            frag_context = getContext();
+            Log.d(TAG, "onAttach: ");
+        }
+
+
+        @Override
+        public void onResume() {
+            super.onResume();
+        }
+
+
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            super.onCreateView(inflater, container, savedInstanceState);
+            return inflater.inflate(R.layout.fragment_detailed_feed_line_chart, container, false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            chart = view.findViewById(R.id.chart);
+            chart.setOnValueTouchListener(new LineValueTouchListener());
+            chart.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+
+            generateData();
+        }
+
+        private void generateData() {
+            List<Line> lines = new ArrayList<Line>();
+            for (int i = 0; i < numberOfLines; ++i) {
+
+                List<PointValue> values = new ArrayList<PointValue>();
+                for (int j = 0; j < device_history_datum.getData().getDeviceData().getAmpsI1().size(); ++j) {
+                    float value;
+                    value = Float.parseFloat("" + device_history_datum.getData().getDeviceData().getAmpsI1().get(j));
+                    values.add(new PointValue(j, value));
+                }
+
+                Line line = new Line(values);
+                line.setColor(ChartUtils.COLORS[i]);
+                line.setShape(shape);
+                line.setCubic(isCubic);
+                line.setFilled(isFilled);
+                line.setHasLabels(hasLabels);
+                line.setHasLabelsOnlyForSelected(hasLabelForSelected);
+                line.setHasLines(hasLines);
+                line.setHasPoints(hasPoints);
+                if (pointsHaveDifferentColor) {
+                    line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
+                }
+                lines.add(line);
+            }
+
+            data = new LineChartData(lines);
+
+            if (hasAxes) {
+                Axis axisX = new Axis();
+                Axis axisY = new Axis().setHasLines(true);
+                if (hasAxesNames) {
+                    if (basis_str.equalsIgnoreCase("Daily")) {
+                        axisX.setName("Days");
+                    } else if(basis_str.equalsIgnoreCase("Hourly")) {
+                        axisX.setName("Hours");
+                    } else if(basis_str.equalsIgnoreCase("Minute")) {
+                        axisX.setName("Minutes");
+                    }
+                    axisY.setName("Values");
+                }
+                data.setAxisXBottom(axisX);
+                data.setAxisYLeft(axisY);
+            } else {
+                data.setAxisXBottom(null);
+                data.setAxisYLeft(null);
+            }
+
+            data.setBaseValue(Float.NEGATIVE_INFINITY);
+            chart.setLineChartData(data);
+
+        }
+
+        private class LineValueTouchListener implements LineChartOnValueSelectListener {
+            @Override
+            public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
+//                Toast.makeText(activity_context, "value: "+ value, Toast.LENGTH_SHORT).show();
+            }
             @Override
             public void onValueDeselected() {
 

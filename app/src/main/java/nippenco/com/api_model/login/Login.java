@@ -10,12 +10,12 @@ import nippenco.com.api_model.Alert;
 
 public class Login {
 
-    @SerializedName("ResponseCode")
-    @Expose
-    private Integer responseCode;
     @SerializedName("Data")
     @Expose
     private Data data;
+    @SerializedName("ResponseCode")
+    @Expose
+    private Integer responseCode;
 
     /**
      * No args constructor for use in serialization
@@ -29,17 +29,9 @@ public class Login {
      * @param responseCode
      * @param data
      */
-    public Login(Integer responseCode, Data data) {
+    public Login(Data data, Integer responseCode) {
         super();
-        this.responseCode = responseCode;
         this.data = data;
-    }
-
-    public Integer getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(Integer responseCode) {
         this.responseCode = responseCode;
     }
 
@@ -49,6 +41,14 @@ public class Login {
 
     public void setData(Data data) {
         this.data = data;
+    }
+
+    public Integer getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(Integer responseCode) {
+        this.responseCode = responseCode;
     }
 
     public ArrayList<Alert> getAllNormalizedAlerts(){
@@ -63,5 +63,6 @@ public class Login {
     public Alert getNormalizedAlert(RecentAlert ra){
         return new Alert(ra.getConditionValue(), ra.getId(), ra.getDeviceId(), ra.getConditionName(), ra.getDeviceName(), ra.getFeedValue(), ra.getAlarmName(), ra.getDescription(), ra.getCreatedAt());
     }
+
 
 }

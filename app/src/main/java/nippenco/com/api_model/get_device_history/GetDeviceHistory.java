@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class GetDeviceHistory {
 
-    @SerializedName("ResponseCode")
-    @Expose
-    private Integer responseCode;
     @SerializedName("Data")
     @Expose
     private Data data;
+    @SerializedName("ResponseCode")
+    @Expose
+    private Integer responseCode;
 
     /**
      * No args constructor for use in serialization
@@ -25,17 +25,9 @@ public class GetDeviceHistory {
      * @param responseCode
      * @param data
      */
-    public GetDeviceHistory(Integer responseCode, Data data) {
+    public GetDeviceHistory(Data data, Integer responseCode) {
         super();
-        this.responseCode = responseCode;
         this.data = data;
-    }
-
-    public Integer getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(Integer responseCode) {
         this.responseCode = responseCode;
     }
 
@@ -45,6 +37,14 @@ public class GetDeviceHistory {
 
     public void setData(Data data) {
         this.data = data;
+    }
+
+    public Integer getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(Integer responseCode) {
+        this.responseCode = responseCode;
     }
 
 }

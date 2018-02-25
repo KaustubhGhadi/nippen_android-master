@@ -1,32 +1,33 @@
 
 package nippenco.com.api_model.login;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Device {
 
-    @SerializedName("comm_interval")
+    @SerializedName("ct_gain")
     @Expose
-    private double commInterval;
-    @SerializedName("latest_data")
+    private Integer ctGain;
+    @SerializedName("vt_gain")
     @Expose
-    private LatestData latestData;
-    @SerializedName("id")
-    @Expose
-    private int id;
+    private Integer vtGain;
     @SerializedName("device_id")
     @Expose
     private String deviceId;
-    @SerializedName("ct_gain")
-    @Expose
-    private double ctGain;
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("vt_gain")
+    @SerializedName("id")
     @Expose
-    private double vtGain;
+    private Integer id;
+    @SerializedName("latest_data")
+    @Expose
+    private List<LatestDatum> latestData = null;
+    @SerializedName("comm_interval")
+    @Expose
+    private Integer commInterval;
 
     /**
      * No args constructor for use in serialization
@@ -45,39 +46,31 @@ public class Device {
      * @param deviceId
      * @param commInterval
      */
-    public Device(double commInterval, LatestData latestData, int id, String deviceId, double ctGain, String name, double vtGain) {
+    public Device(Integer ctGain, Integer vtGain, String deviceId, String name, Integer id, List<LatestDatum> latestData, Integer commInterval) {
         super();
-        this.commInterval = commInterval;
-        this.latestData = latestData;
-        this.id = id;
-        this.deviceId = deviceId;
         this.ctGain = ctGain;
-        this.name = name;
         this.vtGain = vtGain;
-    }
-
-    public double getCommInterval() {
-        return commInterval;
-    }
-
-    public void setCommInterval(double commInterval) {
+        this.deviceId = deviceId;
+        this.name = name;
+        this.id = id;
+        this.latestData = latestData;
         this.commInterval = commInterval;
     }
 
-    public LatestData getLatestData() {
-        return latestData;
+    public Integer getCtGain() {
+        return ctGain;
     }
 
-    public void setLatestData(LatestData latestData) {
-        this.latestData = latestData;
+    public void setCtGain(Integer ctGain) {
+        this.ctGain = ctGain;
     }
 
-    public int getId() {
-        return id;
+    public Integer getVtGain() {
+        return vtGain;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setVtGain(Integer vtGain) {
+        this.vtGain = vtGain;
     }
 
     public String getDeviceId() {
@@ -88,14 +81,6 @@ public class Device {
         this.deviceId = deviceId;
     }
 
-    public double getCtGain() {
-        return ctGain;
-    }
-
-    public void setCtGain(double ctGain) {
-        this.ctGain = ctGain;
-    }
-
     public String getName() {
         return name;
     }
@@ -104,12 +89,28 @@ public class Device {
         this.name = name;
     }
 
-    public double getVtGain() {
-        return vtGain;
+    public Integer getId() {
+        return id;
     }
 
-    public void setVtGain(double vtGain) {
-        this.vtGain = vtGain;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<LatestDatum> getLatestData() {
+        return latestData;
+    }
+
+    public void setLatestData(List<LatestDatum> latestData) {
+        this.latestData = latestData;
+    }
+
+    public Integer getCommInterval() {
+        return commInterval;
+    }
+
+    public void setCommInterval(Integer commInterval) {
+        this.commInterval = commInterval;
     }
 
 }

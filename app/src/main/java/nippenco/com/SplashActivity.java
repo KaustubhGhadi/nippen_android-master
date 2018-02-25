@@ -81,6 +81,7 @@ public class SplashActivity extends Activity {
                         @Override
                         public void onResponse(JSONObject response) {
                             if(response.optInt("ResponseCode") != 200){
+                                Toast.makeText(activity, "Invalid Data!", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             try{

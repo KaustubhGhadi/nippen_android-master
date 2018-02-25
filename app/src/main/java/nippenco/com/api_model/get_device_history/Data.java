@@ -6,15 +6,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class Data {
 
+    @SerializedName("device_data")
+    @Expose
+    private DeviceData deviceData;
     @SerializedName("timestamps")
     @Expose
     private Timestamps timestamps;
     @SerializedName("device")
     @Expose
     private Device device;
-    @SerializedName("device_data")
-    @Expose
-    private DeviceData deviceData;
 
     /**
      * No args constructor for use in serialization
@@ -29,10 +29,18 @@ public class Data {
      * @param timestamps
      * @param device
      */
-    public Data(Timestamps timestamps, Device device, DeviceData deviceData) {
+    public Data(DeviceData deviceData, Timestamps timestamps, Device device) {
         super();
+        this.deviceData = deviceData;
         this.timestamps = timestamps;
         this.device = device;
+    }
+
+    public DeviceData getDeviceData() {
+        return deviceData;
+    }
+
+    public void setDeviceData(DeviceData deviceData) {
         this.deviceData = deviceData;
     }
 
@@ -50,14 +58,6 @@ public class Data {
 
     public void setDevice(Device device) {
         this.device = device;
-    }
-
-    public DeviceData getDeviceData() {
-        return deviceData;
-    }
-
-    public void setDeviceData(DeviceData deviceData) {
-        this.deviceData = deviceData;
     }
 
 }

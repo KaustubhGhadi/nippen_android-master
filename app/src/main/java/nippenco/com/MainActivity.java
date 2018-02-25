@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import nippenco.com.fragment.AlertManagementFragment;
+import nippenco.com.fragment.ViewAlertsFragment;
 import nippenco.com.fragment.DetailedFeedFragment;
 import nippenco.com.fragment.HomeFragment;
 import nippenco.com.fragment.NotiffListFragment;
@@ -217,8 +218,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case 3:
-                fragment = new AlertManagementFragment();
-                frag_str = "AlertManagementFragment";
+                fragment = new ViewAlertsFragment();
+                frag_str = "ViewAlertsFragment";
                 break;
 
             case 4:
@@ -229,6 +230,11 @@ public class MainActivity extends AppCompatActivity {
             case 5:
                 fragment = new NotiffListFragment();
                 frag_str = "NotiffListFragment";
+                break;
+
+            case 6:
+                fragment = new AlertManagementFragment();
+                frag_str = "AlertManagementFragment";
                 break;
 
             default:

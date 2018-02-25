@@ -1,63 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    style="@style/Theme.AppCompat.NoActionBar"
-    android:layout_width="match_parent"
-    android:background="@color/emirates_blue"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/white_background">
 
     <RelativeLayout
-        android:id="@+id/main_view"
+        android:id="@+id/top_head_rl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/top_head_rl"
-            android:layout_width="match_parent"
-            android:background="@color/emirates_blue"
-            android:layout_height="60dp">
+        android:background="@color/white_background"
+        android:layout_height="60dp">
 
 
-            <LinearLayout
-                android:id="@+id/meter_select_ll"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_centerHorizontal="true"
-                android:padding="15dp"
-                android:gravity="center"
-                android:layout_alignParentTop="true">
-
-                <TextView
-                    android:id="@+id/meter_name_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="@color/white_background"
-                    android:layout_gravity="center"
-                    android:text="All Notifications" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/main_content"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/meter_select_ll"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
-            android:layout_below="@id/top_head_rl">
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:padding="15dp"
+            android:gravity="center"
+            android:layout_alignParentTop="true">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/notiff_rv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible">
+            <TextView
+                android:id="@+id/meter_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center"
+                android:text="Edit Alert" />
+        </LinearLayout>
 
-            </android.support.v7.widget.RecyclerView>
-
-        </RelativeLayout>
     </RelativeLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/date_select_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="visible"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_below="@id/top_head_rl">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Device History :- "
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Feed Type:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+
+            <Button
+                android:id="@+id/select_feed_type_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-- Select Feed Type -- "
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:minWidth="230dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Basis:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+
+            <Button
+                android:id="@+id/basis_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-- Select Basis -- "
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:minWidth="230dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Graph Type:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+
+            <Button
+                android:id="@+id/graph_type_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-- Select Graph Type -- "
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:minWidth="230dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+
+            <Button
+                android:id="@+id/select_from_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-- Select From Date --"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:minWidth="230dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+
+            <Button
+                android:id="@+id/select_to_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-- Select To Date -- "
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:minWidth="230dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/submit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>

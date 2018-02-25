@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import nippenco.com.api_model.Alert;
+import nippenco.com.api_model.get_all_alarms.Datum;
 import nippenco.com.api_model.login.Login;
 
 /**
@@ -20,6 +21,9 @@ public class Common {
     public int selected_login_device;
     public ArrayList<Alert> alerts_arr;
     public String device_history_for = "";
+    public int device_history_for_pos = -1;
+    public Datum alarm_to_edit;
+    public int alarm_to_edit_pos;
 
     public static Common getInstance() {
         return ourInstance;

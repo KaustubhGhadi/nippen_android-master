@@ -7,15 +7,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class Data {
 
-    @SerializedName("user_info")
-    @Expose
-    private UserInfo userInfo;
     @SerializedName("devices")
     @Expose
     private Devices devices;
     @SerializedName("recent_alerts")
     @Expose
     private List<RecentAlert> recentAlerts = null;
+    @SerializedName("user_info")
+    @Expose
+    private UserInfo userInfo;
     @SerializedName("unread_alerts")
     @Expose
     private Integer unreadAlerts;
@@ -30,24 +30,16 @@ public class Data {
     /**
      * 
      * @param unreadAlerts
-     * @param devices
      * @param userInfo
+     * @param devices
      * @param recentAlerts
      */
-    public Data(UserInfo userInfo, Devices devices, List<RecentAlert> recentAlerts, Integer unreadAlerts) {
+    public Data(Devices devices, List<RecentAlert> recentAlerts, UserInfo userInfo, Integer unreadAlerts) {
         super();
-        this.userInfo = userInfo;
         this.devices = devices;
         this.recentAlerts = recentAlerts;
-        this.unreadAlerts = unreadAlerts;
-    }
-
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
+        this.unreadAlerts = unreadAlerts;
     }
 
     public Devices getDevices() {
@@ -64,6 +56,14 @@ public class Data {
 
     public void setRecentAlerts(List<RecentAlert> recentAlerts) {
         this.recentAlerts = recentAlerts;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     public Integer getUnreadAlerts() {

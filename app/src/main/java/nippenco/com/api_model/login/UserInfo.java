@@ -6,27 +6,27 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserInfo {
 
-    @SerializedName("role")
-    @Expose
-    private String role;
-    @SerializedName("last_name")
-    @Expose
-    private String lastName;
     @SerializedName("mobile")
     @Expose
     private String mobile;
     @SerializedName("first_name")
     @Expose
     private String firstName;
-    @SerializedName("email")
+    @SerializedName("role")
     @Expose
-    private String email;
+    private String role;
     @SerializedName("id")
     @Expose
     private Integer id;
     @SerializedName("username")
     @Expose
     private String username;
+    @SerializedName("last_name")
+    @Expose
+    private String lastName;
+    @SerializedName("email")
+    @Expose
+    private String email;
 
     /**
      * No args constructor for use in serialization
@@ -45,31 +45,15 @@ public class UserInfo {
      * @param firstName
      * @param mobile
      */
-    public UserInfo(String role, String lastName, String mobile, String firstName, String email, Integer id, String username) {
+    public UserInfo(String mobile, String firstName, String role, Integer id, String username, String lastName, String email) {
         super();
-        this.role = role;
-        this.lastName = lastName;
         this.mobile = mobile;
         this.firstName = firstName;
-        this.email = email;
+        this.role = role;
         this.id = id;
         this.username = username;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
         this.lastName = lastName;
+        this.email = email;
     }
 
     public String getMobile() {
@@ -88,12 +72,12 @@ public class UserInfo {
         this.firstName = firstName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getRole() {
+        return role;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Integer getId() {
@@ -110,6 +94,22 @@ public class UserInfo {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 }

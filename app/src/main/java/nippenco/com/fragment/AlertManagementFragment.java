@@ -5,33 +5,32 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import nippenco.com.Common;
 import nippenco.com.MainActivity;
 import nippenco.com.R;
-import nippenco.com.adapter.NotiffListAdapter;
-import nippenco.com.api_model.login.RecentAlert;
+import nippenco.com.adapter.AlertsListAdapter;
+import nippenco.com.api_model.get_all_alarms.GetAllAlarms;
 
 /**
- * Created by aishwarydhare on 24/02/18.
+ * Created by aishwarydhare on 26/02/18.
  */
 
 public class AlertManagementFragment extends Fragment {
 
     private Context activity_context, frag_context;
     private String TAG = "NPN_LOG";
-    RecyclerView notiff_rv;
-    NotiffListAdapter notiffListAdapter;
+    RecyclerView alarms_rv;
     TextView meter_name_tv;
+    private AlertsListAdapter alertsListAdapter;
+    private GetAllAlarms all_alarms_datum;
+    private ProgressBar pb;
 
 
     @Override
@@ -63,15 +62,15 @@ public class AlertManagementFragment extends Fragment {
 
         meter_name_tv.setText("Manage Alert");
 
-//        notiffListAdapter = new NotiffListAdapter(frag_context, Alert);
-//        notiff_rv.setLayoutManager( new LinearLayoutManager(frag_context));
-//        notiff_rv.setAdapter(notiffListAdapter);
-//        notiff_rv.setVisibility(View.VISIBLE);
+        alarms_rv.setVisibility(View.GONE);
+        pb.setVisibility(View.VISIBLE);
+
     }
 
     private void initLayoutVars(View view) {
-        notiff_rv = view.findViewById(R.id.notiff_rv);
+        alarms_rv = view.findViewById(R.id.notiff_rv);
         meter_name_tv = view.findViewById(R.id.meter_name_tv);
+        pb = view.findViewById(R.id.pb);
     }
 
 }

@@ -6,15 +6,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class Device {
 
+    @SerializedName("id")
+    @Expose
+    private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("device_id")
     @Expose
     private String deviceId;
-    @SerializedName("id")
-    @Expose
-    private Integer id;
 
     /**
      * No args constructor for use in serialization
@@ -29,10 +29,18 @@ public class Device {
      * @param name
      * @param deviceId
      */
-    public Device(String name, String deviceId, Integer id) {
+    public Device(Integer id, String name, String deviceId) {
         super();
+        this.id = id;
         this.name = name;
         this.deviceId = deviceId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -50,14 +58,6 @@ public class Device {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
 }

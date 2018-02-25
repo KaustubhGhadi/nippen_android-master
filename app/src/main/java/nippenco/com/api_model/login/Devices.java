@@ -7,12 +7,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class Devices {
 
-    @SerializedName("type")
-    @Expose
-    private String type;
     @SerializedName("devices")
     @Expose
     private List<Device> devices = null;
+    @SerializedName("type")
+    @Expose
+    private String type;
 
     /**
      * No args constructor for use in serialization
@@ -23,20 +23,12 @@ public class Devices {
 
     /**
      * 
-     * @param devices
      * @param type
+     * @param devices
      */
-    public Devices(String type, List<Device> devices) {
+    public Devices(List<Device> devices, String type) {
         super();
-        this.type = type;
         this.devices = devices;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
         this.type = type;
     }
 
@@ -46,6 +38,14 @@ public class Devices {
 
     public void setDevices(List<Device> devices) {
         this.devices = devices;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }
