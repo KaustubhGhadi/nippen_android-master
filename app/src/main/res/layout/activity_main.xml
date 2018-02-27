@@ -103,15 +103,13 @@
                 android:id="@+id/home_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="18dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
-                <!--android:src="@drawable/avatar" -->
+                    android:layout_height="35dp"
+                    android:src="@drawable/home" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -132,15 +130,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:paddingTop="18dp"
-                android:paddingBottom="18dp"
+                android:layout_marginTop="18dp"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
+                    android:src="@drawable/devicehistory"
                     android:layout_marginTop="20dp" />
-                <!--android:src="@drawable/lock2"-->
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -160,16 +157,15 @@
                 android:id="@+id/alerts_ll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="18dp"
-                android:paddingBottom="18dp"
+                android:layout_marginTop="18dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
+                    android:src="@drawable/alarm"
                     android:layout_marginTop="20dp" />
-                <!--android:src="@drawable/wallet_n"-->
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -199,18 +195,17 @@
 
             <LinearLayout
                 android:id="@+id/settings_ll"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="18dp"
-                android:paddingBottom="18dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
+                    android:src="@drawable/settings"
                     android:layout_marginTop="20dp" />
-                <!--android:src="@drawable/settings"-->
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -235,9 +230,9 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
+                    android:src="@drawable/logout"
                     android:layout_marginTop="20dp" />
-                <!--android:src="@drawable/logout"-->
 
                 <TextView
                     android:layout_width="wrap_content"

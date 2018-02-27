@@ -33,7 +33,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/date_select_ll"
+        android:id="@+id/alarm_update_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Get Device History :- "
+            android:text="Edit Alarm :- "
             android:textColor="@color/colorPrimary"
             android:layout_marginBottom="10dp"
             android:layout_alignParentLeft="true"
@@ -60,16 +60,38 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Feed Type:"
+                android:text="Device:"
                 android:textColor="@color/colorPrimary"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"/>
 
             <Button
-                android:id="@+id/select_feed_type_btn"
+                android:id="@+id/device_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-- Select Feed Type -- "
+                android:text="-- Select Device -- "
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:minWidth="230dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alarm Name:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+
+            <EditText
+                android:id="@+id/alarm_name_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Enter Alarm Name"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:minWidth="230dp"/>
@@ -83,16 +105,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Basis:"
+                android:text="Parameter:"
                 android:textColor="@color/colorPrimary"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"/>
 
             <Button
-                android:id="@+id/basis_btn"
+                android:id="@+id/parameter_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-- Select Basis -- "
+                android:text="-- Select Parameter -- "
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:minWidth="230dp"/>
@@ -112,10 +134,10 @@
                 android:layout_centerVertical="true"/>
 
             <Button
-                android:id="@+id/graph_type_btn"
+                android:id="@+id/condition_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-- Select Graph Type -- "
+                android:text="-- Select Condition -- "
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:minWidth="230dp"/>
@@ -128,42 +150,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="From:"
+                android:text="Enter Value:"
                 android:textColor="@color/colorPrimary"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"/>
 
-            <Button
-                android:id="@+id/select_from_btn"
+            <EditText
+                android:id="@+id/value_et"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-- Select From Date --"
+                android:hint="Enter Value"
+                android:inputType="numberDecimal"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:minWidth="230dp"/>
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="To:"
-                android:textColor="@color/colorPrimary"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"/>
-
-            <Button
-                android:id="@+id/select_to_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-- Select To Date -- "
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:minWidth="230dp"/>
         </RelativeLayout>
 
         <RelativeLayout

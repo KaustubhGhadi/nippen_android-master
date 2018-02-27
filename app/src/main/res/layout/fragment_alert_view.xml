@@ -16,18 +16,14 @@
         <RelativeLayout
             android:id="@+id/top_head_rl"
             android:layout_width="match_parent"
-            android:background="@color/emirates_blue"
             android:layout_height="60dp">
 
 
-            <LinearLayout
-                android:id="@+id/meter_select_ll"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/meter_select_rl"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:layout_centerHorizontal="true"
-                android:padding="15dp"
-                android:gravity="center"
                 android:layout_alignParentTop="true">
 
                 <TextView
@@ -35,10 +31,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
+                    android:layout_centerInParent="true"
                     android:textColor="@color/white_background"
-                    android:layout_gravity="center"
-                    android:text="All Notifications" />
-            </LinearLayout>
+                    android:text="Manage Alerts" />
+
+                <TextView
+                    android:id="@+id/create_new_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_background"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="18sp"
+                    android:padding="15dp"
+                    android:text="New"/>
+            </RelativeLayout>
 
         </RelativeLayout>
 
@@ -46,7 +54,6 @@
             android:id="@+id/main_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
             android:layout_below="@id/top_head_rl">
 
             <android.support.v7.widget.RecyclerView
@@ -56,6 +63,12 @@
                 android:visibility="visible">
 
             </android.support.v7.widget.RecyclerView>
+
+            <ProgressBar
+                android:id="@+id/pb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
 
         </RelativeLayout>
     </RelativeLayout>

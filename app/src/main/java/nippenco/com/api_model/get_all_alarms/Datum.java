@@ -11,7 +11,7 @@ public class Datum {
     private Condition condition;
     @SerializedName("value")
     @Expose
-    private Integer value;
+    private Double value;
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -41,7 +41,7 @@ public class Datum {
      * @param device
      * @param value
      */
-    public Datum(Condition condition, Integer value, Integer id, String name, Device device, Parameter parameter) {
+    public Datum(Condition condition, Double value, Integer id, String name, Device device, Parameter parameter) {
         super();
         this.condition = condition;
         this.value = value;
@@ -59,11 +59,11 @@ public class Datum {
         this.condition = condition;
     }
 
-    public Integer getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 

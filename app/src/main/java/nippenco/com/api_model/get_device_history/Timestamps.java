@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class Timestamps {
 
-    @SerializedName("from_date")
-    @Expose
-    private String fromDate;
     @SerializedName("to_date")
     @Expose
     private String toDate;
+    @SerializedName("from_date")
+    @Expose
+    private String fromDate;
 
     /**
      * No args constructor for use in serialization
@@ -25,17 +25,9 @@ public class Timestamps {
      * @param fromDate
      * @param toDate
      */
-    public Timestamps(String fromDate, String toDate) {
+    public Timestamps(String toDate, String fromDate) {
         super();
-        this.fromDate = fromDate;
         this.toDate = toDate;
-    }
-
-    public String getFromDate() {
-        return fromDate;
-    }
-
-    public void setFromDate(String fromDate) {
         this.fromDate = fromDate;
     }
 
@@ -45,6 +37,14 @@ public class Timestamps {
 
     public void setToDate(String toDate) {
         this.toDate = toDate;
+    }
+
+    public String getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
     }
 
 }

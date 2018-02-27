@@ -41,10 +41,10 @@ public class AlertsListAdapter extends RecyclerView.Adapter<AlertsListAdapter.Vi
         holder.title_tv.setText(alarm.getName());
         holder.subtitle_tv.setText(alarm.getDevice().getName());
         holder.para_name_tv.setText(alarm.getParameter().getName());
-        holder.para_sub_tv.setText(alarm.getParameter().getKey());
+        holder.para_sub_tv.setText("[" + alarm.getParameter().getKey() + "]");
         holder.para_type_tv.setText(alarm.getParameter().getDataType());
         holder.condition_tv.setText(alarm.getCondition().getName());
-        holder.value_tv.setText(alarm.getValue());
+        holder.value_tv.setText("" + alarm.getValue());
 
         holder.edit_tv.setOnClickListener(new View.OnClickListener() {
             @Override

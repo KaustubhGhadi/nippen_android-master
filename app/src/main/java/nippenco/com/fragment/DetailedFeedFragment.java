@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -405,6 +406,7 @@ public class DetailedFeedFragment extends Fragment {
 //        }
     }
 
+
     private void initLayoutVars(View v) {
         meter_name_tv = v.findViewById(R.id.meter_name_tv);
         select_from_btn = v.findViewById(R.id.select_from_btn);
@@ -442,8 +444,8 @@ public class DetailedFeedFragment extends Fragment {
             } else if(graph_type_str.equalsIgnoreCase("Line Graph")){
                 getActivity().getSupportFragmentManager().beginTransaction().replace(chart_container_fl.getId(), new DetailedLineDataChartFragment()).commit();
             }
-            from_date_tv.setText(date_from_str);
-            to_date_tv.setText(date_to_str);
+            from_date_tv.setText(device_history_datum.getData().getTimestamps().getFromDate());
+            to_date_tv.setText(device_history_datum.getData().getTimestamps().getToDate());
             basis_tv.setText(basis_str);
             feed_type_tv.setText(feed_type_str);
             date_select_ll.setVisibility(View.GONE);
@@ -492,7 +494,7 @@ public class DetailedFeedFragment extends Fragment {
                             e.printStackTrace();
                             Toast.makeText(activity_context, "data fetch error", Toast.LENGTH_SHORT).show();
                         }
-                        if (device_history_datum.getData().getDeviceData().getTimestamps().size() > 0) {
+                        if (device_history_datum.getData().getDeviceData().get(0).getValues().size() > 0) {
                             update_UI(true);
                         } else {
                             Toast.makeText(activity_context, "No Data Found", Toast.LENGTH_SHORT).show();
@@ -534,6 +536,7 @@ public class DetailedFeedFragment extends Fragment {
         private boolean hasAxesNames = true;
         private boolean hasLabels = true;
         private boolean hasLabelForSelected = false;
+        private TextView nodata_tv;
 
         @Override
         public void onAttach(Context context) {
@@ -560,6 +563,7 @@ public class DetailedFeedFragment extends Fragment {
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             chart = view.findViewById(R.id.chart);
+            nodata_tv = view.findViewById(R.id.nodata_tv);
             chart.setOnValueTouchListener(new ColumnValueTouchListener());
             chart.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
 
@@ -567,16 +571,42 @@ public class DetailedFeedFragment extends Fragment {
         }
 
         private void generateDefaultData() {
+            int numColumns = 0;
             int numSubcolumns = 1;
+            List<String> dbl_arr = new ArrayList<>();
+            ArrayList<String> str_arr = new ArrayList<>();
             // Column can have many subcolumns, here by default I use 1 subcolumn in each of 25 columns.
             List<Column> columns = new ArrayList<Column>();
             List<SubcolumnValue> values;
-            for (int i = 0; i < device_history_datum.getData().getDeviceData().getAmpsI1().size(); ++i) {
+
+            for (int i = 0; i < device_history_datum.getData().getDeviceData().size(); i++) {
+                String short_name = Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device).getLatestData().get(feed_type_pos).getShortName();
+                if(device_history_datum.getData().getDeviceData().get(i).getName().equalsIgnoreCase("timestamps")) {
+                    str_arr = (ArrayList<String>) device_history_datum.getData().getDeviceData().get(i).getValues();
+                }
+                if(device_history_datum.getData().getDeviceData().get(i).getName().equalsIgnoreCase(short_name)){
+                    dbl_arr = device_history_datum.getData().getDeviceData().get(i).getValues();
+                }
+            }
+
+            if(dbl_arr.size() != str_arr.size()){
+                nodata_tv.setVisibility(View.VISIBLE);
+                chart.setVisibility(View.GONE);
+                return;
+            } else if(dbl_arr.size() < 1){
+                nodata_tv.setVisibility(View.VISIBLE);
+                chart.setVisibility(View.GONE);
+                return;
+            }
+
+            numColumns = str_arr.size();
+
+            for (int i = 0; i < numColumns; ++i) {
 
                 values = new ArrayList<SubcolumnValue>();
                 for (int j = 0; j < numSubcolumns; ++j) {
                     float value = 0;
-                    value = Float.parseFloat(""+device_history_datum.getData().getDeviceData().getAmpsI1().get(i));
+                    value = Float.parseFloat(""+dbl_arr.get(i));
                     values.add(new SubcolumnValue(value, ChartUtils.pickColor()));
                 }
 
@@ -609,7 +639,6 @@ public class DetailedFeedFragment extends Fragment {
             }
 
             chart.setColumnChartData(data);
-
         }
 
         private class ColumnValueTouchListener implements ColumnChartOnValueSelectListener {
@@ -644,6 +673,7 @@ public class DetailedFeedFragment extends Fragment {
         private boolean hasLabelForSelected = false;
         private boolean pointsHaveDifferentColor;
         private boolean hasGradientToTransparent = false;
+        private TextView nodata_tv;
 
         @Override
         public void onAttach(Context context) {
@@ -670,6 +700,7 @@ public class DetailedFeedFragment extends Fragment {
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             chart = view.findViewById(R.id.chart);
+            nodata_tv = view.findViewById(R.id.nodata_tv);
             chart.setOnValueTouchListener(new LineValueTouchListener());
             chart.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
 
@@ -678,12 +709,38 @@ public class DetailedFeedFragment extends Fragment {
 
         private void generateData() {
             List<Line> lines = new ArrayList<Line>();
+            int numberOfPoints = 0;
+            List<String> dbl_arr = new ArrayList<>();
+            ArrayList<String> str_arr = new ArrayList<>();
+
+            for (int i = 0; i < device_history_datum.getData().getDeviceData().size(); i++) {
+                String short_name = Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device).getLatestData().get(feed_type_pos).getShortName();
+                if(device_history_datum.getData().getDeviceData().get(i).getName().equalsIgnoreCase("timestamps")) {
+                    str_arr = (ArrayList<String>) device_history_datum.getData().getDeviceData().get(i).getValues();
+                }
+                if(device_history_datum.getData().getDeviceData().get(i).getName().equalsIgnoreCase(short_name)){
+                    dbl_arr = device_history_datum.getData().getDeviceData().get(i).getValues();
+                }
+            }
+
+            if(dbl_arr.size() != str_arr.size()){
+                nodata_tv.setVisibility(View.VISIBLE);
+                chart.setVisibility(View.GONE);
+                return;
+            } else if(dbl_arr.size() < 1){
+                nodata_tv.setVisibility(View.VISIBLE);
+                chart.setVisibility(View.GONE);
+                return;
+            }
+
+            numberOfPoints = str_arr.size();
+
             for (int i = 0; i < numberOfLines; ++i) {
 
                 List<PointValue> values = new ArrayList<PointValue>();
-                for (int j = 0; j < device_history_datum.getData().getDeviceData().getAmpsI1().size(); ++j) {
+                for (int j = 0; j < numberOfPoints; ++j) {
                     float value;
-                    value = Float.parseFloat("" + device_history_datum.getData().getDeviceData().getAmpsI1().get(j));
+                    value = Float.parseFloat("" + dbl_arr.get(j));
                     values.add(new PointValue(j, value));
                 }
 

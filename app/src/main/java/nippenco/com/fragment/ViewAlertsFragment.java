@@ -49,6 +49,8 @@ public class ViewAlertsFragment extends Fragment {
     private AlertsListAdapter alertsListAdapter;
     private GetAllAlarms all_alarms_datum;
     private ProgressBar pb;
+    private JsonObjectRequest jsonObjectRequest;
+    private TextView create_new_tv;
 
 
     @Override
@@ -78,10 +80,20 @@ public class ViewAlertsFragment extends Fragment {
 
         initLayoutVars(view);
 
-        meter_name_tv.setText("Manage Alert");
+        meter_name_tv.setText("Manage Alerts");
 
         alarms_rv.setVisibility(View.GONE);
+        create_new_tv.setVisibility(View.GONE);
         pb.setVisibility(View.VISIBLE);
+
+        create_new_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.getInstance().alarm_to_edit = null;
+                Common.getInstance().alarm_to_edit_pos = -1;
+                ((MainActivity)activity_context).set_fragment(6);
+            }
+        });
 
         hit_api_to_get_all_alarms();
     }
@@ -89,6 +101,7 @@ public class ViewAlertsFragment extends Fragment {
     private void initLayoutVars(View view) {
         alarms_rv = view.findViewById(R.id.notiff_rv);
         meter_name_tv = view.findViewById(R.id.meter_name_tv);
+        create_new_tv = view.findViewById(R.id.create_new_tv);
         pb = view.findViewById(R.id.pb);
     }
 
@@ -100,7 +113,7 @@ public class ViewAlertsFragment extends Fragment {
         payload.put("offset", ""+0);
         JSONObject jsonPayload = new JSONObject(payload);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, jsonPayload,
+        jsonObjectRequest = new JsonObjectRequest(url, jsonPayload,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -115,15 +128,19 @@ public class ViewAlertsFragment extends Fragment {
                         }catch (Exception e){
                             e.printStackTrace();
                             Toast.makeText(activity_context, "Invalid Data!", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                         if(temp_datum.getData().size() > 0){
                             all_alarms_datum = temp_datum;
                             alertsListAdapter = new AlertsListAdapter(activity_context, all_alarms_datum);
                             alarms_rv.setLayoutManager( new LinearLayoutManager(frag_context));
                             alarms_rv.setAdapter(alertsListAdapter);
+                            pb.setVisibility(View.GONE);
                             alarms_rv.setVisibility(View.VISIBLE);
+                            create_new_tv.setVisibility(View.VISIBLE);
                         } else {
                             Toast.makeText(activity_context, "No Data Found", Toast.LENGTH_SHORT).show();
+                            pb.setVisibility(View.GONE);
                         }
                     }
                 },
@@ -133,6 +150,7 @@ public class ViewAlertsFragment extends Fragment {
                         // if error received
                         error.printStackTrace();
                         Toast.makeText(activity_context, "Invalid Data!", Toast.LENGTH_SHORT).show();
+                        pb.setVisibility(View.GONE);
                     }
                 });
 
@@ -142,4 +160,11 @@ public class ViewAlertsFragment extends Fragment {
         ((MainActivity)activity_context).requestQueue.add(jsonObjectRequest);
     }
 
+    @Override
+    public void onDestroy() {
+        if (jsonObjectRequest != null) {
+            jsonObjectRequest.cancel();
+        }
+        super.onDestroy();
+    }
 }

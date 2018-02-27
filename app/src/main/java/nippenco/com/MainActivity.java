@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
             drawer_icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_drawer));
         }
 
-        if(frag_str.equalsIgnoreCase("NotiffListFragment")){
+        if(frag_str.equalsIgnoreCase("NotiffListFragment") || frag_str.equalsIgnoreCase("AlertManagementFragment")){
             drawer_icon.setVisibility(View.GONE);
             back_icon_white.setVisibility(View.GONE);
             back_icon.setVisibility(View.VISIBLE);
@@ -261,8 +261,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(getSupportFragmentManager().getBackStackEntryCount() == 0 && !frag_str.equalsIgnoreCase("HomeFragment")){
             getSupportFragmentManager().beginTransaction().addToBackStack(frag_str).replace(R.id.fragment_fl, fragment, frag_str).commit();
+
+        } else if(getSupportFragmentManager().getBackStackEntryCount() == 1 && frag_str.equalsIgnoreCase("AlertManagementFragment")) {
+            getSupportFragmentManager().beginTransaction().addToBackStack(frag_str).replace(R.id.fragment_fl, fragment, frag_str).commit();
+
         } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_fl, fragment, frag_str).commit();
+
         }
 
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -332,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 2000);
         } else {
-            if(selected_frag_id == 5){
+            if(true){
                 drawer_icon.setVisibility(View.VISIBLE);
                 back_icon.setVisibility(View.GONE);
                 back_icon_white.setVisibility(View.GONE);
