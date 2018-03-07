@@ -36,11 +36,13 @@
 
         <activity
             android:name=".OnboardingActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".SignUpActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
 
         <service

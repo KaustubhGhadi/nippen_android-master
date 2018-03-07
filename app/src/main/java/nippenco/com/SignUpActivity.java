@@ -94,6 +94,8 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             if(response.optInt("ResponseCode") != 200){
+                                Toast.makeText(activity, "Invalid Data, Please Sign In Again", Toast.LENGTH_SHORT).show();
+                                toggle_pb_visibility(false);
                                 return;
                             }
                             try{
@@ -108,12 +110,11 @@ public class SignUpActivity extends AppCompatActivity {
                             sharedPrefEditor.putString("user_name", email);
                             sharedPrefEditor.putString("user_pass", password);
                             sharedPrefEditor.apply();
-                            toggle_pb_visibility(false);
                             startActivity(new Intent(activity, MainActivity.class));
                             finish();
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(activity, "Invalid Data, , Please Sign In Again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "Invalid Data, Please Sign In Again", Toast.LENGTH_SHORT).show();
                             toggle_pb_visibility(false);
                         }
                     }

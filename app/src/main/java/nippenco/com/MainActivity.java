@@ -311,8 +311,8 @@ public class MainActivity extends AppCompatActivity {
     public void sign_out_user(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
-        sharedPreferences.edit().putString("username", "").apply();
-        sharedPreferences.edit().putString("password", "").apply();
+        sharedPreferences.edit().putString("user_name", "").apply();
+        sharedPreferences.edit().putString("user_pass", "").apply();
         startActivity(new Intent(activity, OnboardingActivity.class));
         Common.getInstance().login_datum = null;
         Common.getInstance().alerts_arr = null;
