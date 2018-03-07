@@ -534,7 +534,7 @@ public class DetailedFeedFragment extends Fragment {
         private ColumnChartData data;
         private boolean hasAxes = true;
         private boolean hasAxesNames = true;
-        private boolean hasLabels = true;
+        private boolean hasLabels = false;
         private boolean hasLabelForSelected = false;
         private TextView nodata_tv;
 

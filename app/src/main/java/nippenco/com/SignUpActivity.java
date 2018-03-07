@@ -113,7 +113,8 @@ public class SignUpActivity extends AppCompatActivity {
                             finish();
                         } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(activity, "Invalid Data", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "Invalid Data, , Please Sign In Again", Toast.LENGTH_SHORT).show();
+                            toggle_pb_visibility(false);
                         }
                     }
                 },
@@ -122,7 +123,8 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError e) {
                         // if error received
                         e.printStackTrace();
-                        Toast.makeText(activity, "Invalid Data Fetch Failed, Sign In Again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Invalid Data, Please Sign In Again", Toast.LENGTH_SHORT).show();
+                        toggle_pb_visibility(false);
                     }
                 });
 

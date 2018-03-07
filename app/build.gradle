@@ -26,6 +26,7 @@ dependencies {
     implementation 'com.android.support:cardview-v7:27.0.2'
     implementation 'com.android.support:recyclerview-v7:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.wefika:horizontal-picker:1.1.1'
 
     implementation 'me.relex:circleindicator:1.2.2@aar'
     implementation 'com.google.code.gson:gson:2.8.2'
@@ -39,7 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:11.8.0'
 
     //hello charts and graphs
-    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    compile 'com.github.lecho:hellocharts-android:v1.5.8'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

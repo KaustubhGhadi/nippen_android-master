@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import nippenco.com.fragment.AlertManagementFragment;
+import nippenco.com.fragment.HomeFragment2;
+import nippenco.com.fragment.HomeFragment3;
 import nippenco.com.fragment.ViewAlertsFragment;
 import nippenco.com.fragment.DetailedFeedFragment;
 import nippenco.com.fragment.HomeFragment;
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.detailed_ll).setOnClickListener(nav_drawer_items_listener);
         findViewById(R.id.alerts_ll).setOnClickListener(nav_drawer_items_listener);
         findViewById(R.id.settings_ll).setOnClickListener(nav_drawer_items_listener);
-//        findViewById(R.id.signout_ll).setOnClickListener(nav_drawer_items_listener);
+        findViewById(R.id.signout_ll).setOnClickListener(nav_drawer_items_listener);
 
         set_fragment(1);
 
@@ -305,7 +309,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void sign_out_user(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
+        sharedPreferences.edit().putString("username", "").apply();
+        sharedPreferences.edit().putString("password", "").apply();
         startActivity(new Intent(activity, OnboardingActivity.class));
+        Common.getInstance().login_datum = null;
+        Common.getInstance().alerts_arr = null;
+        Common.getInstance().main_obj = null;
+        Common.getInstance().selected_login_device = -1;
         finish();
     }
 
