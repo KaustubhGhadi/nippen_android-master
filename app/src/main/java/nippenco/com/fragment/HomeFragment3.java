@@ -72,7 +72,7 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
     private View nodata_tv;
     static String selected_feed_parameter = "";
     private DetailedLineDataChartFragment feed_fragment;
-    private boolean is_fetching_data;
+    private boolean is_fetching_data = false;
     JsonObjectRequest update_data_request;
     private Runnable data_updation_runnable;
     private Handler data_updation_handler;
@@ -90,7 +90,17 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
     public void onResume() {
         super.onResume();
         ((MainActivity)activity_context).selected_frag_id = 1;
-        Log.d(TAG, "onResume: ");
+        try {
+            if(data_updation_handler != null){
+                if(data_updation_runnable != null){
+                    if (!is_fetching_data) {
+                        data_updation_handler.postDelayed(data_updation_runnable, 5000);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -146,6 +156,17 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
 
 
     void update_UI() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        try {
+            int temp_device_pos = sharedPreferences.getInt("last_meter", -1);
+            if(temp_device_pos != -1){
+                if(Common.getInstance().login_datum.getData().getDevices().getDevices().get(temp_device_pos) != null){
+                    Common.getInstance().selected_login_device = temp_device_pos;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         meter_name_tv.setText(Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device).getName());
 
         login_datum_device = Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device);
@@ -271,6 +292,8 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
                     Log.d(TAG, "onClick: "+ strName);
                     Common.getInstance().selected_login_device = which;
                     update_UI();
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    sharedPreferences.edit().putInt("last_meter", Common.getInstance().selected_login_device).apply();
                 }
                 dialog.dismiss();
             }
@@ -428,14 +451,16 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         try {
             if (update_data_request != null) {
                 update_data_request.cancel();
-                is_fetching_data = false;
             }
             data_updation_handler.removeCallbacks(data_updation_runnable);
+            is_fetching_data = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
         super.onPause();
     }
+
+
 
 
 }
