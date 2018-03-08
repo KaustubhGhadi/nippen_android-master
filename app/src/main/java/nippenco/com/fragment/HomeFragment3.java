@@ -2,7 +2,11 @@ package nippenco.com.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,9 +19,21 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
@@ -29,9 +45,14 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
 import nippenco.com.Common;
 import nippenco.com.MainActivity;
+import nippenco.com.OnboardingActivity;
 import nippenco.com.R;
 import nippenco.com.api_model.login.Device;
+import nippenco.com.api_model.login.Login;
 import nippenco.com.utils.HorizontalPicker;
+
+import static nippenco.com.Constant.host;
+import static nippenco.com.Constant.login;
 
 /**
  * Created by aishwarydhare on 03/02/18.
@@ -49,6 +70,12 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
     private Device login_datum_device;
     FrameLayout line_chart_fl;
     private View nodata_tv;
+    static String selected_feed_parameter = "";
+    private DetailedLineDataChartFragment feed_fragment;
+    private boolean is_fetching_data;
+    JsonObjectRequest update_data_request;
+    private Runnable data_updation_runnable;
+    private Handler data_updation_handler;
 
     @Override
     public void onAttach(Context context) {
@@ -72,6 +99,7 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         super.onCreateView(inflater, container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_home_3, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -106,6 +134,7 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         });
     }
 
+
     private void initLayoutVars(View v) {
         meter_name_tv = v.findViewById(R.id.meter_name_tv);
         notiff_count_tv = v.findViewById(R.id.notiff_count_tv);
@@ -128,8 +157,93 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
 
         horizontal_picker.setValues(picker_values);
 
-        getActivity().getSupportFragmentManager().beginTransaction().replace(line_chart_fl.getId(), new DetailedLineDataChartFragment()).commit();
+        if (selected_feed_parameter.equalsIgnoreCase("")) {
+            horizontal_picker.setSelectedItem(0);
+            selected_feed_parameter = picker_values[0];
+        }
+
+        if (feed_fragment != null) {
+            getActivity().getSupportFragmentManager().beginTransaction().detach(feed_fragment).attach(feed_fragment).commit();
+        } else {
+            feed_fragment = new DetailedLineDataChartFragment();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(line_chart_fl.getId(), feed_fragment).commit();
+        }
         line_chart_fl.setVisibility(View.VISIBLE);
+
+        if(data_updation_runnable == null){
+            data_updation_runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (!is_fetching_data) {
+                        Log.i(TAG, "run: requesting data");
+                        update_data();
+                    }
+                }
+            };
+            data_updation_handler = new Handler();
+            data_updation_handler.postDelayed(data_updation_runnable, 5000);
+        }
+    }
+
+
+    void update_graph(){
+        getActivity().getSupportFragmentManager().beginTransaction().detach(feed_fragment).attach(feed_fragment).commit();
+        line_chart_fl.setVisibility(View.VISIBLE);
+    }
+
+
+    void update_data(){
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        String url = host + login;
+        String user_name = sharedPreferences.getString("user_name", "");
+        String user_pass = sharedPreferences.getString("user_pass", "");
+
+        Map<String, String> payload = new HashMap<>();
+        payload.put("username", user_name);
+        payload.put("password", user_pass);
+        JSONObject jsonPayload = new JSONObject(payload);
+
+        update_data_request = new JsonObjectRequest(url, jsonPayload,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        is_fetching_data = false;
+                        if(response.optInt("ResponseCode") != 200){
+                            Log.e(TAG, "onResponse: Invalid Response");
+                            data_updation_handler.postDelayed(data_updation_runnable, 5000);
+                            return;
+                        }
+                        try{
+                            Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+                            Common.getInstance().login_datum = gson.fromJson(response.toString(), Login.class);
+                            Common.getInstance().alerts_arr = Common.getInstance().login_datum.getAllNormalizedAlerts();
+                            data_updation_handler.postDelayed(data_updation_runnable, 5000);
+                            update_UI();
+                            is_fetching_data = false;
+                            Log.i(TAG, "req: data updated");
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // if error received
+                        error.printStackTrace();
+                        Log.e(TAG, "onResponse: Invalid Fetched");
+                        data_updation_handler.postDelayed(data_updation_runnable, 5000);
+                    }
+                });
+
+        update_data_request.setRetryPolicy(new DefaultRetryPolicy( 15000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        is_fetching_data = true;
+        ((MainActivity)getActivity()).requestQueue.add(update_data_request);
+
     }
 
 
@@ -168,12 +282,17 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
     @Override
     public void onItemClicked(int index) {
         Log.d(TAG, "onItemClicked: " + ""+ picker_values[index]);
+        selected_feed_parameter = picker_values[index];
+        update_graph();
     }
 
     @Override
     public void onItemSelected(int index) {
         Log.d(TAG, "onItemSelected: " + ""+ picker_values[index]);
+        selected_feed_parameter = picker_values[index];
+        update_graph();
     }
+
 
     public static class DetailedLineDataChartFragment extends Fragment {
 
@@ -185,7 +304,7 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         private boolean hasAxes = false;
         private boolean hasAxesNames = true;
         private boolean hasLines = true;
-        private boolean hasPoints = false;
+        private boolean hasPoints = true;
         private ValueShape shape = ValueShape.CIRCLE;
         private boolean isFilled = true;
         private boolean hasLabels = false;
@@ -202,13 +321,6 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
             frag_context = getContext();
             Log.d(TAG, "onAttach: ");
         }
-
-
-        @Override
-        public void onResume() {
-            super.onResume();
-        }
-
 
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -231,24 +343,27 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
             List<Line> lines = new ArrayList<Line>();
             int numberOfPoints = 0;
             List<String> dbl_arr = new ArrayList<>();
-            ArrayList<String> str_arr = new ArrayList<>();
+//            ArrayList<String> str_arr = new ArrayList<>();
 
-            for (int i = 0; i < 5; i++) {
-                str_arr.add("" + i + " minutes");
-                dbl_arr.add(""+i*4);
+            Device device = Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device);
+
+            for (int i = 0; i < device.getLatestData().size(); i++) {
+                if(device.getLatestData().get(i).getName().equalsIgnoreCase(selected_feed_parameter)) {
+                    for (int j = 0; j < device.getLatestData().get(i).getPastValues().size(); j++) {
+                        dbl_arr.add("" + device.getLatestData().get(i).getPastValues().get(j));
+                    }
+                    dbl_arr.add("" + device.getLatestData().get(i).getValue());
+                    break;
+                }
             }
 
-            if(dbl_arr.size() != str_arr.size()){
+            if(dbl_arr.size() < 1){
                 nodata_tv.setVisibility(View.VISIBLE);
                 chart.setVisibility(View.GONE);
                 return;
-            } else if(dbl_arr.size() < 1){
-                nodata_tv.setVisibility(View.VISIBLE);
-                chart.setVisibility(View.GONE);
-                return;
             }
 
-            numberOfPoints = str_arr.size();
+            numberOfPoints = dbl_arr.size();
 
             for (int i = 0; i < numberOfLines; ++i) {
 
@@ -268,7 +383,7 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
                 line.setHasLabelsOnlyForSelected(hasLabelForSelected);
                 line.setHasLines(hasLines);
                 line.setHasPoints(hasPoints);
-//                line.setHasGradientToTransparent(hasGradientToTransparent);
+                line.setHasGradientToTransparent(hasGradientToTransparent);
                 if (pointsHaveDifferentColor) {
                     line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
                 }
@@ -306,4 +421,21 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
             }
         }
     }
+
+
+    @Override
+    public void onPause() {
+        try {
+            if (update_data_request != null) {
+                update_data_request.cancel();
+                is_fetching_data = false;
+            }
+            data_updation_handler.removeCallbacks(data_updation_runnable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onPause();
+    }
+
+
 }

@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id){
             case 1:
-                fragment = new HomeFragment();
+                fragment = new HomeFragment3();
                 frag_str = "HomeFragment";
                 break;
 

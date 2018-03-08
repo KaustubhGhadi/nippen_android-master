@@ -665,7 +665,7 @@ public class DetailedFeedFragment extends Fragment {
         private boolean hasAxes = true;
         private boolean hasAxesNames = true;
         private boolean hasLines = true;
-        private boolean hasPoints = false;
+        private boolean hasPoints = true;
         private ValueShape shape = ValueShape.CIRCLE;
         private boolean isFilled = true;
         private boolean hasLabels = false;
