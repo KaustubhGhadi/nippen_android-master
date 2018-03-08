@@ -2,7 +2,6 @@ package nippenco.com.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aigestudio.wheelpicker.WheelPicker;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,7 +30,10 @@ import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,11 +48,9 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
 import nippenco.com.Common;
 import nippenco.com.MainActivity;
-import nippenco.com.OnboardingActivity;
 import nippenco.com.R;
 import nippenco.com.api_model.login.Device;
 import nippenco.com.api_model.login.Login;
-import nippenco.com.utils.HorizontalPicker;
 
 import static nippenco.com.Constant.host;
 import static nippenco.com.Constant.login;
@@ -58,24 +59,25 @@ import static nippenco.com.Constant.login;
  * Created by aishwarydhare on 03/02/18.
  */
 
-public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSelected, HorizontalPicker.OnItemClicked {
+public class HomeFragment3 extends Fragment implements WheelPicker.OnItemSelectedListener{
 
-    Context activity_context, frag_context;
+    private Context activity_context, frag_context;
     private TextView meter_name_tv;
     private TextView notiff_count_tv;
     private ImageView notiff_iv;
     private String TAG = "NPN_LOG";
-    String[] picker_values;
-    private HorizontalPicker horizontal_picker;
+    private ArrayList<String> picker_values;
+    private WheelPicker wheel_picker;
     private Device login_datum_device;
-    FrameLayout line_chart_fl;
-    private View nodata_tv;
+    private FrameLayout line_chart_fl;
     static String selected_feed_parameter = "";
     private DetailedLineDataChartFragment feed_fragment;
     private boolean is_fetching_data = false;
-    JsonObjectRequest update_data_request;
+    private JsonObjectRequest update_data_request;
     private Runnable data_updation_runnable;
     private Handler data_updation_handler;
+    private TextView last_update_tv, goto_feed_tv;
+    static TextView current_value_tv, nodata_tv;
 
     @Override
     public void onAttach(Context context) {
@@ -120,6 +122,8 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         nodata_tv.setVisibility(View.GONE);
         line_chart_fl.setVisibility(View.GONE);
 
+        picker_values = new ArrayList<>();
+
         View.OnClickListener notiff_click_listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,14 +136,28 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         update_UI();
 
         notiff_count_tv.setText(""+Common.getInstance().login_datum.getData().getUnreadAlerts());
+        notiff_count_tv.setVisibility(View.GONE);
 
-        horizontal_picker.setOnItemClickedListener(this);
-        horizontal_picker.setOnItemSelectedListener(this);
+        wheel_picker.setOnItemSelectedListener(this);
+        wheel_picker.setCurved(true);
+        wheel_picker.setIndicator(true);
+        wheel_picker.setIndicatorColor(getActivity().getResources().getColor(R.color.white_background));
+        wheel_picker.setSelectedItemTextColor(getActivity().getResources().getColor(R.color.white_background));
+        wheel_picker.setItemTextColor(getActivity().getResources().getColor(R.color.grey_text));
 
         view.findViewById(R.id.meter_select_ll).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openMailboxSelectDialog();
+            }
+        });
+
+        goto_feed_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.getInstance().device_history_for = picker_values.get(wheel_picker.getCurrentItemPosition());
+                Common.getInstance().device_history_for_pos = wheel_picker.getCurrentItemPosition();
+                ((MainActivity)getActivity()).set_fragment(2);
             }
         });
     }
@@ -149,9 +167,12 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         meter_name_tv = v.findViewById(R.id.meter_name_tv);
         notiff_count_tv = v.findViewById(R.id.notiff_count_tv);
         notiff_iv = v.findViewById(R.id.notiff_iv);
-        horizontal_picker = v.findViewById(R.id.picker);
+        wheel_picker = v.findViewById(R.id.wheel_picker);
         line_chart_fl = v.findViewById(R.id.line_chart_fl);
         nodata_tv = v.findViewById(R.id.nodata_tv);
+        last_update_tv = v.findViewById(R.id.last_update_tv);
+        current_value_tv = v.findViewById(R.id.current_value_tv);
+        goto_feed_tv = v.findViewById(R.id.goto_feed_tv);
     }
 
 
@@ -171,24 +192,32 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
 
         login_datum_device = Common.getInstance().login_datum.getData().getDevices().getDevices().get(Common.getInstance().selected_login_device);
 
-        picker_values = new String[login_datum_device.getLatestData().size()];
-        for (int i = 0; i < login_datum_device.getLatestData().size(); i++) {
-            picker_values[i] = login_datum_device.getLatestData().get(i).getName();
-        }
+        if (login_datum_device.getLatestData().size() != picker_values.size()) {
+            picker_values.clear();
+            for (int i = 0; i < login_datum_device.getLatestData().size(); i++) {
+                picker_values.add(login_datum_device.getLatestData().get(i).getName());
+            }
 
-        horizontal_picker.setValues(picker_values);
+            wheel_picker.setData(picker_values);
+        }
 
         if (selected_feed_parameter.equalsIgnoreCase("")) {
-            horizontal_picker.setSelectedItem(0);
-            selected_feed_parameter = picker_values[0];
+            wheel_picker.setSelectedItemPosition(0);
+            selected_feed_parameter = (String) picker_values.get(0);
         }
 
-        if (feed_fragment != null) {
-            getActivity().getSupportFragmentManager().beginTransaction().detach(feed_fragment).attach(feed_fragment).commit();
-        } else {
+        if(Common.getInstance().device_history_for_pos != -1){
+            wheel_picker.setSelectedItemPosition(Common.getInstance().device_history_for_pos);
+            selected_feed_parameter = (String) picker_values.get(Common.getInstance().device_history_for_pos);
+
+        }
+
+//        if (feed_fragment != null) {
+//            getActivity().getSupportFragmentManager().beginTransaction().detach(feed_fragment).attach(feed_fragment).commit();
+//        } else {
             feed_fragment = new DetailedLineDataChartFragment();
             getActivity().getSupportFragmentManager().beginTransaction().replace(line_chart_fl.getId(), feed_fragment).commit();
-        }
+//        }
         line_chart_fl.setVisibility(View.VISIBLE);
 
         if(data_updation_runnable == null){
@@ -204,6 +233,9 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
             data_updation_handler = new Handler();
             data_updation_handler.postDelayed(data_updation_runnable, 5000);
         }
+
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd  hh:mm:ss");
+        last_update_tv.setText(dateFormatter.format(Calendar.getInstance().getTime()));
     }
 
 
@@ -241,9 +273,9 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
                             Common.getInstance().login_datum = gson.fromJson(response.toString(), Login.class);
                             Common.getInstance().alerts_arr = Common.getInstance().login_datum.getAllNormalizedAlerts();
                             data_updation_handler.postDelayed(data_updation_runnable, 5000);
-                            update_UI();
                             is_fetching_data = false;
-                            Log.i(TAG, "req: data updated");
+                            update_UI();
+                            Log.i(TAG, "run: data updated");
                         }catch (Exception e){
                             e.printStackTrace();
                         }
@@ -291,9 +323,9 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
                     String strName = arrayAdapter.getItem(which);
                     Log.d(TAG, "onClick: "+ strName);
                     Common.getInstance().selected_login_device = which;
-                    update_UI();
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     sharedPreferences.edit().putInt("last_meter", Common.getInstance().selected_login_device).apply();
+                    update_UI();
                 }
                 dialog.dismiss();
             }
@@ -301,18 +333,10 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         builderSingle.show();
     }
 
-
     @Override
-    public void onItemClicked(int index) {
-        Log.d(TAG, "onItemClicked: " + ""+ picker_values[index]);
-        selected_feed_parameter = picker_values[index];
-        update_graph();
-    }
-
-    @Override
-    public void onItemSelected(int index) {
-        Log.d(TAG, "onItemSelected: " + ""+ picker_values[index]);
-        selected_feed_parameter = picker_values[index];
+    public void onItemSelected(WheelPicker picker, Object data, int position) {
+        Log.d(TAG, "onItemSelected: " + "" + picker_values.get(position));
+        selected_feed_parameter = picker_values.get(position);
         update_graph();
     }
 
@@ -335,7 +359,6 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         private boolean hasLabelForSelected = false;
         private boolean pointsHaveDifferentColor;
         private boolean hasGradientToTransparent = true;
-        private TextView nodata_tv;
 
         @Override
         public void onAttach(Context context) {
@@ -355,7 +378,6 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             chart = view.findViewById(R.id.chart);
-            nodata_tv = view.findViewById(R.id.nodata_tv);
             chart.setOnValueTouchListener(new LineValueTouchListener());
             chart.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
 
@@ -372,6 +394,7 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
 
             for (int i = 0; i < device.getLatestData().size(); i++) {
                 if(device.getLatestData().get(i).getName().equalsIgnoreCase(selected_feed_parameter)) {
+                    current_value_tv.setText(""+ device.getLatestData().get(i).getValue());
                     for (int j = 0; j < device.getLatestData().get(i).getPastValues().size(); j++) {
                         dbl_arr.add("" + device.getLatestData().get(i).getPastValues().get(j));
                     }
@@ -380,10 +403,43 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
                 }
             }
 
-            if(dbl_arr.size() < 1){
-                nodata_tv.setVisibility(View.VISIBLE);
+            boolean is_at_least_two_nonzero = true;
+            int tmp = 0;
+            for (int i = 0; i < dbl_arr.size(); i++) {
+                if(!dbl_arr.get(i).equalsIgnoreCase(""+0.0)){
+                    tmp += 1;
+                    if (tmp >= 2) {
+                        is_at_least_two_nonzero = false;
+                        break;
+                    }
+                }
+            }
+
+            boolean is_all_data_same = true;
+            double tmp2 = -1.0;
+            for (int i = 0; i < dbl_arr.size(); i++) {
+                if (tmp2 == -1.0) {
+                    tmp2 = Double.parseDouble(dbl_arr.get(i));
+                } else {
+                    if(Double.parseDouble(dbl_arr.get(i)) != tmp2){
+                        is_all_data_same = false;
+                        break;
+                    }
+                }
+            }
+
+            if(is_all_data_same){
+                nodata_tv.setText("Data is consistently same | no graph");
+            } else {
+                nodata_tv.setText("No Recent Data Found");
+            }
+
+            if(is_at_least_two_nonzero || is_all_data_same){
                 chart.setVisibility(View.GONE);
-                return;
+                nodata_tv.setVisibility(View.VISIBLE);
+            } else {
+                nodata_tv.setVisibility(View.GONE);
+                chart.setVisibility(View.VISIBLE);
             }
 
             numberOfPoints = dbl_arr.size();
@@ -436,7 +492,7 @@ public class HomeFragment3 extends Fragment implements HorizontalPicker.OnItemSe
         private class LineValueTouchListener implements LineChartOnValueSelectListener {
             @Override
             public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
-//                Toast.makeText(activity_context, "value: "+ value, Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity_context, "value: "+ value.getY(), Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onValueDeselected() {

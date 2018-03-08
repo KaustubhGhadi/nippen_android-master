@@ -589,17 +589,46 @@ public class DetailedFeedFragment extends Fragment {
                 }
             }
 
-            if(dbl_arr.size() != str_arr.size()){
-                nodata_tv.setVisibility(View.VISIBLE);
-                chart.setVisibility(View.GONE);
-                return;
-            } else if(dbl_arr.size() < 1){
-                nodata_tv.setVisibility(View.VISIBLE);
-                chart.setVisibility(View.GONE);
-                return;
+            boolean is_at_least_two_nonzero = true;
+            int tmp = 0;
+            for (int i = 0; i < dbl_arr.size(); i++) {
+                if(!dbl_arr.get(i).equalsIgnoreCase(""+0.0)){
+                    tmp += 1;
+                    if (tmp >= 2) {
+                        is_at_least_two_nonzero = false;
+                        break;
+                    }
+                }
             }
 
-            numColumns = str_arr.size();
+            boolean is_all_data_same = true;
+            double tmp2 = -1.0;
+            for (int i = 0; i < dbl_arr.size(); i++) {
+                if (tmp2 == -1.0) {
+                    tmp2 = Double.parseDouble(dbl_arr.get(i));
+                } else {
+                    if(Double.parseDouble(dbl_arr.get(i)) != tmp2){
+                        is_all_data_same = false;
+                        break;
+                    }
+                }
+            }
+
+            if(is_all_data_same){
+                nodata_tv.setText("Data is consistently same | no graph");
+            } else {
+                nodata_tv.setText("No Data Found");
+            }
+
+            if(is_at_least_two_nonzero || is_all_data_same){
+                nodata_tv.setVisibility(View.GONE);
+                chart.setVisibility(View.VISIBLE);
+            } else {
+                chart.setVisibility(View.GONE);
+                nodata_tv.setVisibility(View.VISIBLE);
+            }
+
+            numColumns = dbl_arr.size();
 
             for (int i = 0; i < numColumns; ++i) {
 
@@ -723,17 +752,46 @@ public class DetailedFeedFragment extends Fragment {
                 }
             }
 
-            if(dbl_arr.size() != str_arr.size()){
-                nodata_tv.setVisibility(View.VISIBLE);
-                chart.setVisibility(View.GONE);
-                return;
-            } else if(dbl_arr.size() < 1){
-                nodata_tv.setVisibility(View.VISIBLE);
-                chart.setVisibility(View.GONE);
-                return;
+            boolean is_at_least_two_nonzero = true;
+            int tmp = 0;
+            for (int i = 0; i < dbl_arr.size(); i++) {
+                if(!dbl_arr.get(i).equalsIgnoreCase(""+0.0)){
+                    tmp += 1;
+                    if (tmp >= 2) {
+                        is_at_least_two_nonzero = false;
+                        break;
+                    }
+                }
             }
 
-            numberOfPoints = str_arr.size();
+            boolean is_all_data_same = true;
+            double tmp2 = -1.0;
+            for (int i = 0; i < dbl_arr.size(); i++) {
+                if (tmp2 == -1.0) {
+                    tmp2 = Double.parseDouble(dbl_arr.get(i));
+                } else {
+                    if(Double.parseDouble(dbl_arr.get(i)) != tmp2){
+                        is_all_data_same = false;
+                        break;
+                    }
+                }
+            }
+
+            if(is_all_data_same){
+                nodata_tv.setText("Data is consistently same | no graph");
+            } else {
+                nodata_tv.setText("No Data Found");
+            }
+
+            if(is_at_least_two_nonzero || is_all_data_same){
+                nodata_tv.setVisibility(View.GONE);
+                chart.setVisibility(View.VISIBLE);
+            } else {
+                chart.setVisibility(View.GONE);
+                nodata_tv.setVisibility(View.VISIBLE);
+            }
+
+            numberOfPoints = dbl_arr.size();
 
             for (int i = 0; i < numberOfLines; ++i) {
 

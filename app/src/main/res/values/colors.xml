@@ -5,6 +5,7 @@
     <color name="colorAccent">#007d9c</color>
 
     <color name="white_background">#FFFFFF</color>
+    <color name="grey_text">#8effffff</color>
     <color name="emirates_blue">#00529c</color>
     <color name="nippen_red">#00529c</color>
     <color name="sea_green">#1ea681</color>
