@@ -32,8 +32,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import nippenco.com.fragment.AlertManagementFragment;
+import nippenco.com.fragment.DetailedFeedFragment2;
 import nippenco.com.fragment.HomeFragment2;
 import nippenco.com.fragment.HomeFragment3;
+import nippenco.com.fragment.HomeFragment4;
 import nippenco.com.fragment.ViewAlertsFragment;
 import nippenco.com.fragment.DetailedFeedFragment;
 import nippenco.com.fragment.HomeFragment;
@@ -212,12 +214,12 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id){
             case 1:
-                fragment = new HomeFragment3();
+                fragment = new HomeFragment4();
                 frag_str = "HomeFragment";
                 break;
 
             case 2:
-                fragment = new DetailedFeedFragment();
+                fragment = new DetailedFeedFragment2();
                 frag_str = "DetailedFeedFragment";
                 break;
 
@@ -242,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             default:
-                fragment = new HomeFragment();
+                fragment = new HomeFragment4();
                 frag_str = "HomeFragment";
                 break;
         }

@@ -74,6 +74,7 @@ public class SplashActivity extends Activity {
             Map<String, String> payload = new HashMap<>();
             payload.put("username", user_name);
             payload.put("password", user_pass);
+            payload.put("fcm_token", fcm_token);
             JSONObject jsonPayload = new JSONObject(payload);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, jsonPayload,

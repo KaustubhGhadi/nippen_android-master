@@ -15,6 +15,9 @@ public class Device {
     @SerializedName("device_id")
     @Expose
     private String deviceId;
+    @SerializedName("total_phase")
+    @Expose
+    private Integer totalPhase;
 
     /**
      * No args constructor for use in serialization
@@ -28,12 +31,14 @@ public class Device {
      * @param id
      * @param name
      * @param deviceId
+     * @param totalPhase
      */
-    public Device(String name, Integer id, String deviceId) {
+    public Device(String name, Integer id, String deviceId, Integer totalPhase) {
         super();
         this.name = name;
         this.id = id;
         this.deviceId = deviceId;
+        this.totalPhase = totalPhase;
     }
 
     public String getName() {
@@ -60,4 +65,11 @@ public class Device {
         this.deviceId = deviceId;
     }
 
+    public Integer getTotalPhase() {
+        return totalPhase;
+    }
+
+    public void setTotalPhase(Integer totalPhase) {
+        this.totalPhase = totalPhase;
+    }
 }
