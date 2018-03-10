@@ -24,6 +24,7 @@ public class Common {
     public int device_history_for_pos = -1;
     public Datum alarm_to_edit;
     public int alarm_to_edit_pos;
+    public NotificationArrivedInterface onNotificationArrivedCallback;
 
     public static Common getInstance() {
         return ourInstance;

@@ -203,22 +203,46 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:text="Device History For :- "
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentStart="true" />
 
 
-            <TextView
-                android:id="@+id/edit_date_tv"
-                android:layout_width="wrap_content"
+            <LinearLayout
                 android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginBottom="10dp"
                 android:paddingBottom="3dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
                 android:paddingTop="3dp"
-                android:text="Edit"
-                android:textColor="@color/colorPrimary" />
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/show_data_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Show Data"
+                    android:textSize="13sp"
+                    android:paddingLeft="20dp"
+                    android:textAllCaps="false"
+                    android:paddingRight="20dp"
+                    android:layout_marginRight="3dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginEnd="3dp" />
+
+                <Button
+                    android:id="@+id/edit_date_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="Edit"
+                    android:textSize="13sp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
         </RelativeLayout>
 
 
@@ -303,6 +327,14 @@
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/chart_container_fl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/date_show_ll"
+        tools:ignore="MergeRootFrame" />
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/stat_data_container_fl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/date_show_ll"

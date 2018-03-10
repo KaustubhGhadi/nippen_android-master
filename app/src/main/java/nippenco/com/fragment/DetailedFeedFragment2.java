@@ -7,8 +7,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,22 +58,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lecho.lib.hellocharts.listener.ColumnChartOnValueSelectListener;
-import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
-import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.Column;
-import lecho.lib.hellocharts.model.ColumnChartData;
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.SubcolumnValue;
-import lecho.lib.hellocharts.model.ValueShape;
-import lecho.lib.hellocharts.util.ChartUtils;
-import lecho.lib.hellocharts.view.ColumnChartView;
-import lecho.lib.hellocharts.view.LineChartView;
 import nippenco.com.Common;
 import nippenco.com.MainActivity;
 import nippenco.com.R;
+import nippenco.com.adapter.DetailFeedRVAdapter;
 import nippenco.com.api_model.get_device_history.GetDeviceHistory;
 import nippenco.com.api_model.login.Device;
 
@@ -84,7 +76,7 @@ public class DetailedFeedFragment2 extends Fragment {
 
     Context activity_context, frag_context;
     private TextView meter_name_tv;
-    private FrameLayout chart_container_fl;
+    private FrameLayout chart_container_fl, stat_data_container_fl;
     Button select_from_btn, select_to_btn, select_feed_type_btn, select_basis_btn, submit_btn, graph_type_btn;
     ProgressBar pb;
     private String TAG = "NPN_LOG";
@@ -92,12 +84,14 @@ public class DetailedFeedFragment2 extends Fragment {
     static String date_from_str, date_to_str, feed_type_str, basis_str, graph_type_str;
     static int feed_type_pos;
 
-    TextView edit_date_tv, feed_type_tv, basis_tv, from_date_tv, to_date_tv;
+    Button edit_date_tv, show_data_tv;
+    TextView feed_type_tv, basis_tv, from_date_tv, to_date_tv;
     LinearLayout date_select_ll, date_show_ll;
 
     Calendar date;
     static GetDeviceHistory device_history_datum;
     JsonObjectRequest jsonObjectRequest;
+    boolean is_stat_data_visible;
 
     @Override
     public void onAttach(Context context) {
@@ -140,6 +134,14 @@ public class DetailedFeedFragment2 extends Fragment {
         date_from_str = null;
         date_to_str = null;
         graph_type_str = null;
+
+        is_stat_data_visible = false;
+        stat_data_container_fl.setVisibility(View.GONE);
+        chart_container_fl.setVisibility(View.VISIBLE);
+        if(is_stat_data_visible){
+            chart_container_fl.setVisibility(View.GONE);
+            stat_data_container_fl.setVisibility(View.VISIBLE);
+        }
 
         if(Common.getInstance().device_history_for_pos == -1) {
             if (Common.getInstance().device_history_for != null) {
@@ -326,6 +328,23 @@ public class DetailedFeedFragment2 extends Fragment {
             }
         });
 
+        show_data_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                is_stat_data_visible = !is_stat_data_visible;
+                stat_data_container_fl.setVisibility(View.GONE);
+                chart_container_fl.setVisibility(View.VISIBLE);
+                show_data_tv.setText("Show Data");
+                if(is_stat_data_visible){
+                    chart_container_fl.setVisibility(View.GONE);
+                    stat_data_container_fl.setVisibility(View.VISIBLE);
+                    show_data_tv.setText("Show Graph");
+                }
+                Fragment chartDataFragment = new ChartDataFragment();
+                getFragmentManager().beginTransaction().replace(stat_data_container_fl.getId(), chartDataFragment).commit();
+            }
+        });
+
         meter_name_tv.setText(Common.getInstance().login_datum.getData().getDevices().getDevices()
                 .get(Common.getInstance().selected_login_device).getName());
     }
@@ -439,11 +458,13 @@ public class DetailedFeedFragment2 extends Fragment {
         graph_type_btn = v.findViewById(R.id.graph_type_btn);
         submit_btn = v.findViewById(R.id.submit_btn);
         chart_container_fl = v.findViewById(R.id.chart_container_fl);
+        stat_data_container_fl = v.findViewById(R.id.stat_data_container_fl);
 
         date_select_ll = v.findViewById(R.id.date_select_ll);
         date_show_ll = v.findViewById(R.id.date_show_ll);
         basis_tv = v.findViewById(R.id.basis_tv);
         edit_date_tv = v.findViewById(R.id.edit_date_tv);
+        show_data_tv = v.findViewById(R.id.show_data_tv);
         feed_type_tv = v.findViewById(R.id.feed_type_tv);
         from_date_tv = v.findViewById(R.id.from_date_tv);
         to_date_tv = v.findViewById(R.id.to_date_tv);
@@ -546,7 +567,6 @@ public class DetailedFeedFragment2 extends Fragment {
         InputMethodManager keyboard = (InputMethodManager) activity_context.getSystemService(Context.INPUT_METHOD_SERVICE);
         keyboard.hideSoftInputFromWindow(focus.getWindowToken(), 0);
     }
-
 
 
     public static class DetailedColumnDataChartFragment extends Fragment implements OnChartValueSelectedListener {
@@ -740,6 +760,88 @@ public class DetailedFeedFragment2 extends Fragment {
 
         @Override
         public void onNothingSelected() {
+
+        }
+    }
+
+
+    public static class ChartDataFragment extends Fragment {
+        private Context activity_context;
+        private String TAG = "NPN_LOG";
+        private RecyclerView data_rv;
+        private TextView nodata_in_rv_tv;
+        private TabLayout tabLayout;
+        private DetailFeedRVAdapter detailFeedRVAdapter;
+
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            this.activity_context = context;
+            Log.d(TAG, "onAttach: ");
+        }
+
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            super.onCreateView(inflater, container, savedInstanceState);
+            return inflater.inflate(R.layout.fragment_chart_detail_data, container, false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            data_rv = view.findViewById(R.id.data_rv);
+            tabLayout = view.findViewById(R.id.tabLayout);
+            nodata_in_rv_tv = view.findViewById(R.id.nodata_tv);
+
+            tabLayout.setTabTextColors(getResources().getColor(R.color.grey_text2), getResources().getColor(R.color.emirates_blue));
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+            for (int i = 0; i < device_history_datum.getData().getDeviceData().size(); i++) {
+                TabLayout.Tab tab = tabLayout.newTab();
+                tabLayout.addTab(tab);
+            }
+            for (int i = 0; i < device_history_datum.getData().getDeviceData().size(); i++) {
+                String tab_name = "";
+                tab_name = device_history_datum.getData().getDeviceData().get(i).getName();
+                tabLayout.getTabAt(i).setText(tab_name);
+            }
+
+
+            data_rv.setLayoutManager(new LinearLayoutManager(activity_context));
+            detailFeedRVAdapter = new DetailFeedRVAdapter(activity_context, device_history_datum.getData().getDeviceData(), 0);
+            data_rv.setAdapter(detailFeedRVAdapter);
+
+            nodata_in_rv_tv.setVisibility(View.VISIBLE);
+            data_rv.setVisibility(View.GONE);
+            if(detailFeedRVAdapter.getItemCount() > 0){
+                nodata_in_rv_tv.setVisibility(View.GONE);
+                data_rv.setVisibility(View.VISIBLE);
+            }
+
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    int pos = tab.getPosition();
+                    detailFeedRVAdapter = new DetailFeedRVAdapter(activity_context, device_history_datum.getData().getDeviceData(), pos);
+                    data_rv.setAdapter(detailFeedRVAdapter);
+                    nodata_in_rv_tv.setVisibility(View.VISIBLE);
+                    data_rv.setVisibility(View.GONE);
+                    if(detailFeedRVAdapter.getItemCount() > 0){
+                        nodata_in_rv_tv.setVisibility(View.GONE);
+                        data_rv.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+                    // do nothing
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+                    // do nothing
+                }
+            });
 
         }
     }

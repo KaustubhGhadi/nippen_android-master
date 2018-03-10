@@ -165,6 +165,7 @@ public class HomeFragment4 extends Fragment implements WheelPicker.OnItemSelecte
         wheel_picker.setIndicator(true);
         wheel_picker.setIndicatorColor(getActivity().getResources().getColor(R.color.white_background));
         wheel_picker.setSelectedItemTextColor(getActivity().getResources().getColor(R.color.white_background));
+        wheel_picker.setItemTextSize(50);
         wheel_picker.setItemTextColor(getActivity().getResources().getColor(R.color.grey_text));
 
         view.findViewById(R.id.meter_select_ll).setOnClickListener(new View.OnClickListener() {

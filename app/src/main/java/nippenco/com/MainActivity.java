@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +32,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import nippenco.com.api_model.CloudMessage;
 import nippenco.com.fragment.AlertManagementFragment;
 import nippenco.com.fragment.DetailedFeedFragment2;
 import nippenco.com.fragment.HomeFragment2;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean isAlive = false;
     public RequestQueue requestQueue;
+    private CloudMessage cloudMessage;
 
 
     @Override
@@ -170,6 +173,17 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.settings_ll).setOnClickListener(nav_drawer_items_listener);
         findViewById(R.id.signout_ll).setOnClickListener(nav_drawer_items_listener);
 
+        MyFirebaseMessagingService.setNotificationInterface(new NotificationInterface() {
+            @Override
+            public void showNotification(CloudMessage para_cloudMessage) {
+                cloudMessage = para_cloudMessage;
+                Snackbar mySnackbar = Snackbar.make( mDrawerLayout, ""+cloudMessage.description, Snackbar.LENGTH_INDEFINITE);
+                mySnackbar.setAction("SHOW", new MySnackBarListener());
+                mySnackbar.setActionTextColor(getResources().getColor(R.color.white_background));
+                mySnackbar.show();
+            }
+        });
+
         set_fragment(1);
 
         Bundle notification_bundle = getIntent().getExtras();
@@ -182,8 +196,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     builder = new AlertDialog.Builder(activity);
                 }
-                builder.setTitle(jsonObject.getString("title"))
-                        .setMessage(jsonObject.getString("body"))
+                builder.setTitle("Alert !!!")
+                        .setMessage(jsonObject.getString("description"))
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -193,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                         .show();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(activity, "Oops, notiff lapsed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "Oops, notification lapsed", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -281,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     public void on_nav_drawer_item_selected(View view){
         switch (view.getId()){
             case R.id.home_ll:
@@ -364,7 +379,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*class MySnackBarListener implements View.OnClickListener{
+
+    class MySnackBarListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {
             AlertDialog.Builder builder;
@@ -373,8 +389,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 builder = new AlertDialog.Builder(activity);
             }
-            builder.setTitle(cloudMessage.title)
-                    .setMessage(cloudMessage.body)
+            builder.setTitle("Alert !!!")
+                    .setMessage(cloudMessage.description)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -383,10 +399,7 @@ public class MainActivity extends AppCompatActivity {
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         }
-    }*/
-
-
-
+    }
 
 
 }

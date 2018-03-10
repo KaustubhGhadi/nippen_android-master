@@ -15,7 +15,10 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import nippenco.com.api_model.CloudMessage;
 
 /**
  * Created by aishwarydhare on 04/02/18.
@@ -24,6 +27,8 @@ import org.json.JSONObject;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private String TAG = "EMR_FCM_LOG";
     JSONObject notiff_json_obj;
+    private CloudMessage cloudMessage;
+    static NotificationInterface notificationInterface;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -36,11 +41,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             if(remoteMessage.getData() != null){
-                JSONObject jsonObject = new JSONObject(remoteMessage.getData());
-
-
+                JSONObject temp_json = new JSONObject(remoteMessage.getData());
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(temp_json.getString("message"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(jsonObject == null){
+                    return;
+                }
+                CloudMessage temp_cloudMessage = new CloudMessage(
+                        jsonObject.optString("alarm_name"),
+                        jsonObject.optInt("id"),
+                        jsonObject.optDouble("feed_value"),
+                        jsonObject.optString("device_name"),
+                        jsonObject.optInt("device_id"),
+                        jsonObject.optDouble("condition_value"),
+                        jsonObject.optString("created_at"),
+                        jsonObject.optString("description"),
+                        jsonObject.optString("condition_name")
+                );
+                this.cloudMessage = temp_cloudMessage;
                 notiff_json_obj = jsonObject;
-//                showNotification(cloudMessage);
+                showNotification(cloudMessage);
             }
         }
 
@@ -54,7 +78,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     // method for building notification
-    /*
+
     private void showNotification(CloudMessage cloudMessage) {
         int notiff_icon = R.mipmap.ic_launcher;
 
@@ -67,7 +91,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         try {
             PendingIntent pendingIntent = PendingIntent.getActivity(
                     getApplicationContext(),
-                    Integer.parseInt(cloudMessage.id),
+                    cloudMessage.id,
                     intent,
                     PendingIntent.FLAG_UPDATE_CURRENT
             );
@@ -79,8 +103,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Notification mNotification = builder.setSmallIcon(notiff_icon)
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
-                    .setContentTitle(cloudMessage.title+"")
-                    .setContentText(cloudMessage.body)
+                    .setContentTitle("Alert !!!")
+                    .setContentText(cloudMessage.description)
                     .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), notiff_icon))
                     .build();
 
@@ -91,7 +115,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
             // notify the user
-            notificationManager.notify(Integer.parseInt(cloudMessage.id), mNotification);
+            notificationManager.notify(cloudMessage.id, mNotification);
             Log.d("FCM_CUSTOM", "done showing notification");
             playNotificationSound();
             // call this method for build the notification in WittyFeedMyFirebaseMessagingService class
@@ -126,6 +150,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static void setNotificationInterface(NotificationInterface para_notificationInterface) {
         notificationInterface = para_notificationInterface;
     }
-    */
 
 }
