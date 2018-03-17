@@ -28,6 +28,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -163,10 +164,10 @@ public class HomeFragment4 extends Fragment implements WheelPicker.OnItemSelecte
         wheel_picker.setOnItemSelectedListener(this);
         wheel_picker.setCurved(true);
         wheel_picker.setIndicator(true);
-        wheel_picker.setIndicatorColor(getActivity().getResources().getColor(R.color.white_background));
-        wheel_picker.setSelectedItemTextColor(getActivity().getResources().getColor(R.color.white_background));
+        wheel_picker.setIndicatorColor(getActivity().getResources().getColor(R.color.colorPrimary));
+        wheel_picker.setSelectedItemTextColor(getActivity().getResources().getColor(R.color.colorPrimary));
         wheel_picker.setItemTextSize(50);
-        wheel_picker.setItemTextColor(getActivity().getResources().getColor(R.color.grey_text));
+        wheel_picker.setItemTextColor(getActivity().getResources().getColor(R.color.blue_grey_text));
 
         view.findViewById(R.id.meter_select_ll).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -451,6 +452,7 @@ public class HomeFragment4 extends Fragment implements WheelPicker.OnItemSelecte
             LineData lineData = new LineData(lineDataSet);
             chart.setData(lineData);
             chart.invalidate();
+//            chart.animateY(1000, Easing.EasingOption.Linear);
         }
 
         @Override
@@ -543,7 +545,7 @@ public class HomeFragment4 extends Fragment implements WheelPicker.OnItemSelecte
             @Override
             public HomeDataAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 LayoutInflater inflater = LayoutInflater.from(activity_context);
-                View view = inflater.inflate(R.layout.item_dashboard_stat, parent, false);
+                View view = inflater.inflate(R.layout.item_home_dashboard_stat, parent, false);
                 return new ViewHolder(view);
             }
 

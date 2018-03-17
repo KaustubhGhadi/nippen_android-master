@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void showNotification(CloudMessage para_cloudMessage) {
                 cloudMessage = para_cloudMessage;
-                Snackbar mySnackbar = Snackbar.make( mDrawerLayout, ""+cloudMessage.description, Snackbar.LENGTH_INDEFINITE);
+                Snackbar mySnackbar = Snackbar.make( mDrawerLayout, ""+cloudMessage.description, 3000);
                 mySnackbar.setAction("SHOW", new MySnackBarListener());
                 mySnackbar.setActionTextColor(getResources().getColor(R.color.white_background));
                 mySnackbar.show();
@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        if(frag_str.equalsIgnoreCase("DetailedFeedFragment") || frag_str.equalsIgnoreCase("ItemsListFragment")){
+        if(frag_str.equalsIgnoreCase("DetailedFeedFragment") || frag_str.equalsIgnoreCase("ItemsListFragment") || frag_str.equalsIgnoreCase("HomeFragment")){
             drawer_icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_drawer_blue));
         } else {
             drawer_icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_drawer));
@@ -375,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(selected_frag_id == 1){
-            drawer_icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_drawer));
+            drawer_icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_drawer_blue));
         }
     }
 
