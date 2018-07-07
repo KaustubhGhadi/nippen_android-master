@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#344961</color>
+    <color name="colorPrimaryDark">#24303e</color>
+    <color name="colorAccent">#007d9c</color>
+
+    <color name="white_background">#FFFFFF</color>
+    <color name="grey_text">#8effffff</color>
+    <color name="blue_grey_text">#3f4851</color>
+    <color name="grey_text2">#868686</color>
+    <color name="emirates_blue">#00529c</color>
+    <color name="nippen_red">#00529c</color>
+    <color name="sea_green">#1ea681</color>
+    <color name="google_red">#D54B3E</color>
+    <color name="black">#000000</color>
+    <color name="active_green">#149c7a</color>
+    <color name="blue_grey">#e0e0f1</color>
+
+</resources>

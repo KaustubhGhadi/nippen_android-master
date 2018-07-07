@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/white_background">
+
+    <RelativeLayout
+        android:id="@+id/top_head_rl"
+        android:layout_width="match_parent"
+        android:background="@color/white_background"
+        android:layout_height="60dp">
+
+
+        <LinearLayout
+            android:id="@+id/meter_select_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:padding="15dp"
+            android:gravity="center"
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:id="@+id/meter_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center"
+                android:text="Edit Alert" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/alarm_update_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="visible"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_below="@id/top_head_rl">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Alarm :- "
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Device:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".7"/>
+
+            <Button
+                android:id="@+id/device_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-- Select Device -- "
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alarm Name:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".7"/>
+
+            <EditText
+                android:id="@+id/alarm_name_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Alarm Name"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Parameter:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".7"/>
+
+            <Button
+                android:id="@+id/parameter_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-- Select Parameter -- "
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Graph Type:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".7"/>
+
+            <Button
+                android:id="@+id/condition_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="-- Select Condition -- "
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Enter Value:"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".7"/>
+
+            <EditText
+                android:id="@+id/value_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Value"
+                android:inputType="numberDecimal"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_weight=".3"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/submit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>

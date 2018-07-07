@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    style="@style/Theme.AppCompat.NoActionBar"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/top_head_rl"
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_height="60dp">
+
+
+            <LinearLayout
+                android:id="@+id/meter_select_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:padding="15dp"
+                android:gravity="center"
+                android:layout_alignParentTop="true">
+
+                <TextView
+                    android:id="@+id/meter_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/white_background"
+                    android:layout_gravity="center"
+                    android:text="Mailbox 1" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:rotation="180"
+                    android:padding="3dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_triangle"
+                    android:layout_marginStart="5dp" />
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/notiff_iv"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="5dp"
+                android:src="@drawable/bell"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp" />
+
+            <TextView
+                android:id="@+id/notiff_count_tv"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:background="@drawable/ic_circle"
+                android:textColor="@color/white_background"
+                android:layout_marginTop="-5dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="4dp"
+                android:layout_alignTop="@id/notiff_iv"
+                android:text="18"
+                android:gravity="center"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/main_scroller_rl"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:visibility="visible"
+            android:background="@color/colorPrimaryDark"
+            android:layout_alignParentBottom="true">
+
+            <!--<com.techdew.lib.HorizontalWheel.HorizontalView-->
+                <!--android:id="@+id/HorizontalView"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent" />-->
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/main_content_rl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:visibility="gone"
+            android:layout_below="@id/top_head_rl"
+            android:layout_above="@id/main_scroller_rl">
+
+            <TextView
+                android:id="@+id/nodata_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android:text="No Data Found"/>
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/line_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </lecho.lib.hellocharts.view.LineChartView>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

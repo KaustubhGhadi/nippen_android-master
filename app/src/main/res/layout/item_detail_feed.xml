@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/feed_left_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:textAllCaps="true"
+                android:text="TITLE OF STATE"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:id="@+id/feed_right_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="0"
+                android:gravity="right"
+                android:layout_alignParentEnd="true" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/blue_grey"
+                android:layout_below="@id/feed_right_tv"
+                />
+
+        </RelativeLayout>
+
+</RelativeLayout>
