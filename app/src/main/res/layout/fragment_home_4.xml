@@ -89,7 +89,6 @@
             android:paddingRight="20dp"
             android:visibility="visible"
             android:layout_below="@+id/meter_name_rl">
-
             <com.aigestudio.wheelpicker.WheelPicker
                 android:id="@+id/wheel_picker"
                 android:layout_width="match_parent"

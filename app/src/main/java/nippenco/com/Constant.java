@@ -10,7 +10,6 @@ public class Constant {
 //    public static String host = "http://device.nippenco.com/wifi_meter/api/";
     public static String host = "http://192.168.1.188:9000/wifi_meter/api/";
 
-
     public static String login = "login";
     public static String get_device_history = "get_device_history";
     public static String get_all_alerts = "get_all_alerts";
